@@ -17,12 +17,12 @@
     "username": "Username"
   },
   "menu": {
-    "app": "Home",
-    "piaf": "Piaf",
+    "app": "Casa",
+    "piaf": "Kilometraje",
     "dashboards": "Dashboards",
     "second-menu": "Second Menu",
     "second": "Second",
-    "start": "Start",
+    "start": "Inicio",
     "single": "Single",
     "pages": "Pages",
     "charts": "Charts",

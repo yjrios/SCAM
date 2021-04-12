@@ -14,27 +14,30 @@
         <ul class="list-unstyled">
           <li :class="{ active : selectedParentMenu==='piaf' }">
             <a @click.prevent="openSubMenu($event,'piaf')" href="#piaf">
-              <i class="iconsminds-shop"></i>
-              {{ $t("menu.piaf") }}
+              <i class="simple-icon-speedometer"></i>
+              <span>{{ $t("menu.piaf") }}</span>
             </a>
           </li>
 
           <li :class="{ active : selectedParentMenu==='second-menu' }">
             <a @click.prevent="openSubMenu($event,'second-menu')" href="#second-menu">
-              <i class="iconsminds-chemical"></i>
-              {{ $t("menu.second-menu") }}
+              <i class="iconsminds-jeep"></i>
+              <span>{{ $t("menu.second-menu") }}</span>
             </a>
           </li>
 
           <li :class="{ active : selectedParentMenu==='pages'}">
             <a @click.prevent="openSubMenu($event,'pages')" href="#pages">
-              <i class="iconsminds-digital-drawing"></i>
-              {{ $t("menu.pages") }}
+              <i class="simple-icon-wrench"></i>
+              <span>{{ $t("menu.pages") }}</span>
             </a>
           </li>
           <li :class="{ active : selectedParentMenu==='single'}">
              <router-link :class="{ active : selectedParentMenu==='single' }" @click.native="changeSelectedParentHasNoSubmenu('single')" to="/app/single" tag="li">
-                <a><i class="iconsminds-three-arrow-fork"></i>  {{ $t("menu.single") }}</a>
+                <a>
+                  <i class="iconsminds-notepad"> </i>
+                  <span>{{ $t("menu.single") }}</span>
+                </a>
               </router-link>
           </li>
         </ul>
