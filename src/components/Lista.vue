@@ -1,27 +1,22 @@
-<!--<template>
-        <b-card class="mb-12">
+<template>
           <b-table
               id="table-transition-example"
-              :items="list"
+              :items= lista2
               :fields="fields"
               striped
               hover
               primary-key="id"
               :tbody-transition-props="transProps">
             </b-table>
-        </b-card>
-</template>
-<script>/*
 
-import { mapState } from 'vuex'
+</template>
+<script>
 
 export default {
-  computed: {
-    ...mapState('maestroRegistro', ['list'])
-  },
+  name: 'lista',
   data: function () {
     return {
-      list: [],
+      // list: [],
       transProps: {
         // Transition nombre
         name: 'flip-list'
@@ -42,6 +37,13 @@ export default {
         sortable: true
       }]
     }
+  },
+  props: ['lista2'],
+  created () {
+    console.log('created')
+  },
+  updated () {
+    console.log('updated')
   }
-} */
+}
 </script>

@@ -8,9 +8,22 @@
   </b-row>
   <b-row>
     <b-colxx xxs="12">
-        <b-card class="mb-4" :title="$t('menu.second')" >
-        </b-card>
+      <b-card >
+        <Maestro/>
+      </b-card>
     </b-colxx>
   </b-row>
-  </div>
+</div>
+
 </template>
+
+<script>
+import Maestro from '@/components/Maestro.vue'
+
+export default {
+  name: 'Vehiculo',
+  components: {
+    Maestro
+  }
+}
+</script>
