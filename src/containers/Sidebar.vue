@@ -20,7 +20,7 @@
           </li>
 
           <li :class="{ active : selectedParentMenu==='second-menu' }">
-            <a @click.prevent="openSubMenu($event,'second-menu')" href="#second-menu">
+            <a @click.prevent="openSubMenu($event,'second-menu')" href="#second-menu" @click="cargar">
               <i class="iconsminds-jeep"></i>
               <span>{{ $t("menu.second-menu") }}</span>
             </a>
@@ -129,7 +129,8 @@ export default {
     ...mapMutations([
       'changeSideMenuStatus',
       'addMenuClassname',
-      'changeSelectedMenuHasSubItems'
+      'changeSelectedMenuHasSubItems',
+      'cargar'
     ]),
     selectMenu () {
       const currentParentUrl = this.$route.path

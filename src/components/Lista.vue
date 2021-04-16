@@ -1,7 +1,7 @@
 <template>
           <b-table
               id="table-transition-example"
-              :items= lista2
+              :items= list
               :fields="fields"
               striped
               hover
@@ -12,11 +12,14 @@
 </template>
 <script>
 
+import { mapState } from 'vuex'
+// import store from '../store/index'
+
 export default {
   name: 'lista',
   data: function () {
     return {
-      // list: [],
+      // lista: store.state.list,
       transProps: {
         // Transition nombre
         name: 'flip-list'
@@ -38,12 +41,17 @@ export default {
       }]
     }
   },
-  props: ['lista2'],
+  computed: {
+    ...mapState(['list'])
+  },
   created () {
-    console.log('created')
+    console.log('created lista')
   },
   updated () {
-    console.log('updated')
+    console.log('updated lista')
+  },
+  mounted () {
+    console.log('mounted lista')
   }
 }
 </script>

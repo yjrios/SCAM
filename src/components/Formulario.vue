@@ -7,7 +7,7 @@
                   <b-form-group :label="'Ciudad'">
                   <b-form-input type="Text" v-model="city" :placeholder="'Barquisimeto'"/>
                   </b-form-group>
-                  <b-button type="submit" variant="primary" class="mt-4" @click="guardar" @keyup.enter="guardar">Guardar</b-button>
+                  <b-button type="submit" variant="primary" class="mt-4" @click="guardar()" @keyup.enter="guardar">Guardar</b-button>
               </b-form>
 </div>
 </template>
@@ -15,6 +15,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios'
+import { mapMutations } from 'vuex'
 
 export default {
   data: function () {
@@ -37,15 +38,9 @@ export default {
       })
       this.name = ''
       this.city = ''
-      axios.get('http://localhost:3050/customers').then(response => {
-        console.log('response', response)
-        this.$emit('listactualizada', response.data)
-        // localStorage.setItem('lista', this.list)
-        console.log(this)
-      }).catch(error => {
-        console.log('error', error)
-      })
-    }
+      this.$store.commit('cargar')
+    },
+    ...mapMutations(['cargar'])
   }
 }
 </script>

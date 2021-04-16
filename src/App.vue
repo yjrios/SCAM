@@ -7,6 +7,7 @@
 <script>
 import ColorSwitcher from '@/components/Common/ColorSwitcher'
 import { getDirection } from '@/utils'
+import { mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -23,6 +24,12 @@ export default {
       document.dir = 'ltr'
       document.body.classList.remove('rtl')
     }
+  },
+  created: {
+    cargar () {}
+  },
+  methods: {
+    ...mapMutations(['cargar'])
   }
 }
 </script>
