@@ -3,14 +3,12 @@
   <b-row>
     <b-colxx xxs="12">
       <piaf-breadcrumb :heading="$t('menu.second')"/>
-      <div class="separator mb-5"></div>
+      <!--<div class="separator mb-5"></div>--><br><br>
     </b-colxx>
   </b-row>
   <b-row>
     <b-colxx xxs="12">
-      <b-card >
-        <Maestro/>
-      </b-card>
+      <Maestro/>
     </b-colxx>
   </b-row>
 </div>

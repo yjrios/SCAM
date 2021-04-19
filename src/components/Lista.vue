@@ -1,4 +1,5 @@
 <template>
+        <b-card :title="'Listado'">
           <b-table
               id="table-transition-example"
               :items= list
@@ -8,7 +9,7 @@
               primary-key="id"
               :tbody-transition-props="transProps">
             </b-table>
-
+        </b-card>
 </template>
 <script>
 
@@ -19,24 +20,29 @@ export default {
   name: 'lista',
   data: function () {
     return {
-      // lista: store.state.list,
+      // lista: [],
       transProps: {
         // Transition nombre
         name: 'flip-list'
       },
       fields: [{
-        key: 'id',
-        label: 'id',
+        key: 'posicion',
+        label: 'Numero',
         sortable: true
       },
       {
-        key: 'name',
-        label: 'Nombre',
+        key: 'placa',
+        label: 'Placa',
         sortable: true
       },
       {
-        key: 'city',
-        label: 'Ciudad',
+        key: 'modelo',
+        label: 'Modelo',
+        sortable: true
+      },
+      {
+        key: 'marca',
+        label: 'Marca',
         sortable: true
       }]
     }
@@ -45,7 +51,7 @@ export default {
     ...mapState(['list'])
   },
   created () {
-    console.log('created lista')
+    console.log('aqui la lista' + this.list)
   },
   updated () {
     console.log('updated lista')

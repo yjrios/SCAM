@@ -1,6 +1,6 @@
 <template>
-  <nav class="navbar fixed-top">
-    <div class="d-flex align-items-center navbar-left">
+  <nav class="navbar fixed-top" >
+    <div class="d-flex align-items-center navbar-left" >
       <a
         href="#"
         class="menu-button d-none d-md-block"
@@ -16,10 +16,10 @@
         <mobile-menu-icon />
       </a>
     </div>
-    <router-link class="navbar-logo" tag="a" to="/app">
-      <span class="logo d-none d-xs-block"></span>
-      <span class="logo-mobile d-block d-xs-none"></span>
-    </router-link>
+
+    <div>
+      <img src="/assets/img/scam2.jpg">
+    </div>
 
     <div class="navbar-right">
       <div class="d-none d-md-inline-block align-middle mr-3">
@@ -84,6 +84,7 @@ import {
   defaultColor
 } from '@/constants/config'
 import { getDirection, setDirection } from '@/utils'
+
 export default {
   components: {
     MenuIcon,
