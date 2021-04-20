@@ -3,9 +3,9 @@
     <b-colxx xxs="12" md=10  class="mx-auto my-auto">
       <b-card class="auth-card" no-body>
           <div class="position-relative image-side ">
-            <p class=" text-white h2">{{ $t('pages.magic-is-in-the-details') }}</p>
-              <p class="white mb-0">Please use your credentials to login.<br>If you are not a member, please
-                <router-link tag="a" to="/user/register" class="white">register</router-link>.
+            <p class=" text-black h2">LA MAGIA ESTA EN LOS DETALLES</p>
+              <p class="black mb-0">Por favor use sus credenciales para iniciar.<br>Si aun no eres miembro, por favor
+                <router-link tag="" to="" class="black">registrese</router-link>.
               </p>
           </div>
           <div class="form-side">

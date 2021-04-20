@@ -15,20 +15,21 @@ export const localeOptions = [
 ]
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyBBksq-Asxq2M4Ot-75X19IyrEYJqNBPcg',
-  authDomain: 'gogo-react-login.firebaseapp.com',
-  databaseURL: 'https://gogo-react-login.firebaseio.com',
-  projectId: 'gogo-react-login',
-  storageBucket: 'gogo-react-login.appspot.com',
-  messagingSenderId: '216495999563'
+  apiKey: 'AIzaSyAsq3r0DnQIqZwZ9AR66ZjTDr0FvNnMo3Q',
+  authDomain: 'scamlogin-893ad.firebaseapp.com',
+  projectId: 'scamlogin-893ad',
+  storageBucket: 'scamlogin-893ad.appspot.com',
+  messagingSenderId: '457097426143',
+  appId: '1:457097426143:web:badd4df286cd3694c5656a',
+  measurementId: 'G-LGQN3EW5JH'
 }
 
 export const apiUrl = 'https://api.coloredstrategies.com'
 
 export const currentUser = {
   id: 1,
-  title: 'Pablo Puerta',
-  img: '/assets/img/profile-pic-l.jpg',
+  title: 'Usuario Unico',
+  img: '/assets/img/profile-pic-l-9.jpg',
   date: 'Last seen today 15:24'
 }
 

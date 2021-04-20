@@ -8,12 +8,8 @@
     </b-row>
     <b-row>
       <b-colxx xxs="12">
-        <b-card :title="'Registro de nuevo Kilometraje'">
-          <b-row>
-            <b-colxx xxs="4">
-              <Formulario2/>
-            </b-colxx>
-          </b-row>
+        <b-card :title="'Registro de nuevo Kilometraje'"
+            <ActualizarK/>     
         </b-card>
       </b-colxx>
     </b-row>
@@ -22,13 +18,13 @@
 
 <script>
 // @ is an alias to /src
-import Formulario2 from '@/components/Formulario2.vue'
+import ActualizarK from '@/components/ActualizarK.vue'
 /* import axios from 'axios' */
 
 export default {
   name: 'card',
   components: {
-    Formulario2
+    ActualizarK
   }
 }
 </script>
