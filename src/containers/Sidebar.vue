@@ -79,7 +79,7 @@
           data-link="pages"
           :class="{'d-block':selectedParentMenu==='pages' }"
         >
-          <router-link tag="li" to="/user/login">
+        <!-- <router-link tag="li" to="/user/login">
             <a target="_blank">
               <i class="simple-icon-user-following"></i>
               <span>{{ $t("menu.login") }}</span>
@@ -96,7 +96,7 @@
               <i class="simple-icon-user-unfollow"></i>
               <span>{{ $t("menu.forgot-password") }}</span>
             </a>
-          </router-link>
+          </router-link>-->
         </ul>
       </vue-perfect-scrollbar>
     </div>
