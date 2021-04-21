@@ -46,3 +46,4 @@ export const colors = [
   'light.red',
   'dark.red'
 ]
+console.log('ojala esto cargue primero')

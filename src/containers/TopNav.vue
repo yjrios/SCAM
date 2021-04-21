@@ -54,7 +54,7 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1">{{currentUser.title}}</span>
+            <span class="name mr-1">{{user.email}}</span>
             <span>
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
@@ -74,6 +74,7 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { MenuIcon, MobileMenuIcon } from '@/components/Svg'
 import Switches from 'vue-switches'
+import firebase from 'firebase'
 
 import notifications from '@/data/notifications'
 import {
@@ -103,7 +104,8 @@ export default {
       localeOptions,
       buyUrl,
       notifications,
-      isDarkActive: false
+      isDarkActive: false,
+      user: null
     }
   },
   methods: {
@@ -202,6 +204,13 @@ export default {
   created () {
     const color = this.getThemeColor()
     this.isDarkActive = color.indexOf('dark') > -1
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.user = user
+      } else {
+        this.user = null
+      }
+    })
   },
   watch: {
     '$i18n.locale' (to, from) {

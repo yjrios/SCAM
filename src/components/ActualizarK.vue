@@ -72,8 +72,8 @@
                 <p class="azul">MODELO : <span class="nada"> {{datos.modelo}} </span></p>
                 <p class="azul">AÑO :<span class="nada"> {{datos.ano}} </span>  </p>
                 <p class="azul"> COLOR :<span class="nada"> {{datos.color}}</span> </p>
-                <p class="azul">KILOMETRAJE ACTUAL :<span class="nada"> {{datos.km}} km </span></p>
-                <p class="azul">ULTIMA ACTUALIZACION :<span class="nada">  {{datos.fecha}}</span></p>
+                <p class="azul">KILOMETRAJE ACTUAL :<span class="verde"> {{datos.km}} km </span></p>
+                <p class="azul">ULTIMA ACTUALIZACION :<span class="verde">  {{datos.fecha}}</span></p>
                 </b-colxx>
             </b-row>
           </b-card>
@@ -157,6 +157,7 @@ export default ({
         this.titulo = 'Notificacion'
         this.addNotification()
         this.datos.km = this.NKilometraje
+        this.datos.fecha = response.data.data
         if (this.datos.id_status === '1') {
           this.statusc = 'success'
         } else {
@@ -198,5 +199,8 @@ export default ({
   color:#000000;
   font-weight: normal;
 }
-
+.verde {
+  color:#00aa1c;
+  font-weight: bold;
+}
 </style>

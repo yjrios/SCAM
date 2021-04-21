@@ -8,9 +8,9 @@
     </b-row>
     <b-row>
       <b-colxx xxs="12">
-        <b-card :title="'Registro de nuevo Kilometraje'"
-            <ActualizarK/>     
-        </b-card>
+        <!---<b-card :title="'Registro de nuevo Kilometraje'">-->
+          <ActualizarK/>
+       <!--- </b-card>-->
       </b-colxx>
     </b-row>
   </div>
