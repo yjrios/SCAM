@@ -104,7 +104,7 @@ export default ({
   methods: {
     buscar () {
       const placav = this.placa
-      axios.get('http://localhost:3050/kilometraje/' + placav).then(response => {
+      axios.get('http://scam.agroinlaca.com:3050/kilometraje/' + placav).then(response => {
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false
@@ -141,7 +141,7 @@ export default ({
         id_vehiculo: this.datos.id_v,
         km: this.NKilometraje
       }
-      axios.post('http://localhost:3050/actualizarkm/', body).then(response => {
+      axios.post('http://scam.agroinlaca.com:3050/actualizarkm/', body).then(response => {
         console.log('response', response)
         if (response.data.message === 'Kilometraje menor!') {
           this.mensaje = 'Prohibido! Kilometraje menor.'

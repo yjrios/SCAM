@@ -34,7 +34,7 @@
                     </div>
                     <b-card-body>
                         <h6 class="mb-4 card-subtitle">{{datos.marca}} - {{datos.modelo}}</h6>
-                        <h6>KILOMETROS : 350.000 KM </h6><br>
+                        <h6>KILOMETROS : {{datos.km}} KM </h6><br>
                         <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
                     </b-card-body>
                 </b-card>
@@ -105,7 +105,7 @@ export default ({
   methods: {
     buscar () {
       const placav = this.placa
-      axios.get('http://localhost:3050/vehiculos/' + placav).then(response => {
+      axios.get('http://scam.agroinlaca.com:3050/vehiculos/' + placav).then(response => {
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false

@@ -308,7 +308,7 @@ export default {
         ano: this.ano,
         id_status: 1
       }
-      axios.post('http://localhost:3050/add', body).then(response => {
+      axios.post('http://scam.agroinlaca.com:3050/add', body).then(response => {
         console.log('response', response)
         if (response.data.message === 'Exito!') {
           this.name = '' // limpiar
@@ -360,7 +360,7 @@ export default {
     ...mapMutations(['cargar'])
   },
   mounted () {
-    axios.get('http://localhost:3050/tipos_carga').then(response => {
+    axios.get('http://scam.agroinlaca.com:3050/tipos_carga').then(response => {
       console.log('response', response)
       const tipos = response.data.map(item => {
         return { value: item.id, text: item.carga }
@@ -369,7 +369,7 @@ export default {
     }).catch(error => {
       console.log('error', error)
     })
-    axios.get('http://localhost:3050/marcas').then(response => {
+    axios.get('http://scam.agroinlaca.com:3050/marcas').then(response => {
       console.log('response', response)
       const marcas = response.data.map(item => {
         return { text: item.marca, value: item.id }

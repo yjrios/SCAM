@@ -3,13 +3,16 @@
     <b-colxx xxs="12" md=10  class="mx-auto my-auto">
       <b-card class="auth-card" no-body>
           <div class="position-relative image-side ">
-            <p class=" text-black h2">LA MAGIA ESTA EN LOS DETALLES</p>
-              <p class="black mb-0">Por favor use sus credenciales para iniciar.<br>Si aun no eres miembro, por favor
-                <router-link tag="" to="" class="black">registrese</router-link>.
-              </p>
           </div>
           <div class="form-side">
-            <router-link tag="a" to="/"><span class="logo-single"/></router-link>
+            <b-row>
+              <b-col lg="3" md="12" mb='1'>
+              <router-link tag="a" to="/"><span class="logo-single"/></router-link>
+              </b-col>
+              <b-col>
+                <p class="text-black h5">Sistema de Control, Administracion y Mantenimiento De Vehiculos</p>
+              </b-col>
+            </b-row>
             <h6 class="mb-4">{{ $t('user.login-title')}}</h6>
             <b-form @submit.prevent="formSubmit">
               <label class="form-group has-float-label mb-4">

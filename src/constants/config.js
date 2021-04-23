@@ -29,7 +29,7 @@ export const apiUrl = 'https://api.coloredstrategies.com'
 export const currentUser = {
   id: 1,
   title: 'Usuario Unico',
-  img: '/assets/img/profile-pic-l-9.jpg',
+  img: '/assets/img/usuario.jpg',
   date: 'Last seen today 15:24'
 }
 

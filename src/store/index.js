@@ -20,7 +20,7 @@ export const store = new Vuex.Store({
       localStorage.setItem('currentLanguage', payload)
     },
     cargar (state) {
-      axios.get('http://localhost:3050/vehiculos').then(response => {
+      axios.get('http://scam.agroinlaca.com:3050/vehiculos').then(response => {
         console.log('response primero', response)
         state.list = response.data
       }).catch(error => {
