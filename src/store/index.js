@@ -10,7 +10,8 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    list: []
+    list: [],
+    dirapi: 'http://localhost:3050'
   },
   getters: {
   },
@@ -20,8 +21,8 @@ export const store = new Vuex.Store({
       localStorage.setItem('currentLanguage', payload)
     },
     cargar (state) {
-      axios.get('http://scam.agroinlaca.com:3050/vehiculos').then(response => {
-        console.log('response primero', response)
+      axios.get(state.dirapi + '/vehiculos').then(response => {
+        console.log('response primero store', response)
         state.list = response.data
       }).catch(error => {
         console.log('error', error)

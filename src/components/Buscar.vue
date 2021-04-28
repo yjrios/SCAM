@@ -34,7 +34,7 @@
                     </div>
                     <b-card-body>
                         <h6 class="mb-4 card-subtitle">{{datos.marca}} - {{datos.modelo}}</h6>
-                        <h6>KILOMETROS : {{datos.km}} KM </h6><br>
+                        <h6>KILOMETROS : {{datos.kilometraje}} KM </h6><br>
                         <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
                     </b-card-body>
                 </b-card>
@@ -88,6 +88,7 @@
 
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default ({
   name: 'buscar',
@@ -105,7 +106,7 @@ export default ({
   methods: {
     buscar () {
       const placav = this.placa
-      axios.get('http://scam.agroinlaca.com:3050/vehiculos/' + placav).then(response => {
+      axios.get(this.dirapi + '/vehiculos/' + placav).then(response => {
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false
@@ -123,6 +124,7 @@ export default ({
         this.titulo = 'Notificacion'
         this.addNotification()
         this.datos = response.data.data
+        // console.log('aqui mi kilometraje obtenido' + this.datos.kilometraje)
         if (this.datos.id_status === '1') {
           this.statusc = 'success'
         } else {
@@ -139,8 +141,10 @@ export default ({
     ) {
       this.$notify(type, title, message, { duration: 3000, permanent: false })
     }
+  },
+  computed: {
+    ...mapState(['dirapi'])
   }
-
 })
 </script>
 

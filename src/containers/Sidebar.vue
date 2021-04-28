@@ -73,6 +73,24 @@
             </a>
           </router-link>
         </ul>
+        <ul
+          class="list-unstyled"
+          data-link="pages"
+          :class="{'d-block':selectedParentMenu==='pages' }"
+        >
+          <router-link tag="li" to="/app/pages/nuevo_servicio">
+            <a>
+              <i class="simple-icon-paper-plane"></i>
+              <span>Nuevo Mtto</span>
+            </a>
+          </router-link>
+          <router-link tag="li" to="/app/pages/maestro_servicios">
+            <a>
+              <i class="simple-icon-paper-plane"></i>
+              <span>Listado de Mttos</span>
+            </a>
+          </router-link>
+        </ul>
 
         <ul
           class="list-unstyled"

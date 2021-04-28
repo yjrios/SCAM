@@ -140,7 +140,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   data: function () {
@@ -308,7 +308,7 @@ export default {
         ano: this.ano,
         id_status: 1
       }
-      axios.post('http://scam.agroinlaca.com:3050/add', body).then(response => {
+      axios.post(this.dirapi + '/add', body).then(response => {
         console.log('response', response)
         if (response.data.message === 'Exito!') {
           this.name = '' // limpiar
@@ -360,7 +360,7 @@ export default {
     ...mapMutations(['cargar'])
   },
   mounted () {
-    axios.get('http://scam.agroinlaca.com:3050/tipos_carga').then(response => {
+    axios.get(this.dirapi + '/tipos_carga').then(response => {
       console.log('response', response)
       const tipos = response.data.map(item => {
         return { value: item.id, text: item.carga }
@@ -369,7 +369,7 @@ export default {
     }).catch(error => {
       console.log('error', error)
     })
-    axios.get('http://scam.agroinlaca.com:3050/marcas').then(response => {
+    axios.get(this.dirapi + '/marcas').then(response => {
       console.log('response', response)
       const marcas = response.data.map(item => {
         return { text: item.marca, value: item.id }
@@ -378,6 +378,9 @@ export default {
     }).catch(error => {
       console.log('error', error)
     })
+  },
+  computed: {
+    ...mapState(['dirapi'])
   }
 }
 </script>

@@ -28,6 +28,15 @@ const routes = [
         ]
       },
       {
+        path: 'app/pages',
+        component: () => import(/* webpackChunkName: "pages" */ './views/app/servicios'),
+        redirect: '/app/pages/maestro_servicios',
+        children: [
+          { path: 'nuevo_servicio', component: () => import(/* webpackChunkName: "pages" */ './views/app/servicios/Nuevo_Servicio') },
+          { path: 'maestro_servicios', component: () => import(/* webpackChunkName: "pages" */ './views/app/servicios/Maestro_Servicios') }
+        ]
+      },
+      {
         path: 'app/single',
         component: () => import(/* webpackChunkName: "single" */ './views/app/single')
       }
