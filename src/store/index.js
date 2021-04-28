@@ -11,7 +11,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     list: [],
-    dirapi: 'http://localhost:3050'
+    dirapi: 'http://localhost:3050',
+    auto: 'algo'
   },
   getters: {
   },
@@ -24,6 +25,19 @@ export const store = new Vuex.Store({
       axios.get(state.dirapi + '/vehiculos').then(response => {
         console.log('response primero store', response)
         state.list = response.data
+      }).catch(error => {
+        console.log('error', error)
+      })
+    },
+    buscar (state, placa) {
+      axios.get(state.dirapi + '/vehiculos/' + placa).then(response => {
+        console.log('response', response.data.data)
+        if (response.status === 204) {
+          state.auto = response.data.data
+          return
+        }
+        state.auto = response.data.data
+        console.log('datos', state.auto)
       }).catch(error => {
         console.log('error', error)
       })

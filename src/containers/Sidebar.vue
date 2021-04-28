@@ -26,8 +26,8 @@
             </a>
           </li>
 
-          <li :class="{ active : selectedParentMenu==='pages'}">
-            <a @click.prevent="openSubMenu($event,'pages')" href="#pages">
+          <li :class="{ active : selectedParentMenu==='mttos'}">
+            <a @click.prevent="openSubMenu($event,'mttos')" href="#mttos">
               <i class="simple-icon-wrench"></i>
               <span>{{ $t("menu.pages") }}</span>
             </a>
@@ -75,16 +75,16 @@
         </ul>
         <ul
           class="list-unstyled"
-          data-link="pages"
-          :class="{'d-block':selectedParentMenu==='pages' }"
+          data-link="mttos"
+          :class="{'d-block':selectedParentMenu==='mttos' }"
         >
-          <router-link tag="li" to="/app/pages/nuevo_servicio">
+          <router-link tag="li" to="/app/mttos/nuevo_mtto">
             <a>
               <i class="simple-icon-paper-plane"></i>
               <span>Nuevo Mtto</span>
             </a>
           </router-link>
-          <router-link tag="li" to="/app/pages/maestro_servicios">
+          <router-link tag="li" to="/app/mttos/listado_mttos">
             <a>
               <i class="simple-icon-paper-plane"></i>
               <span>Listado de Mttos</span>

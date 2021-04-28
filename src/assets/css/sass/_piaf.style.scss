@@ -2874,7 +2874,7 @@ main {
   @include depth(1);
 
   .card-body {
-    padding: 1.75rem;
+    padding: 1.5rem;
 
     @include respond-below(xs) {
       padding: 1.25rem;

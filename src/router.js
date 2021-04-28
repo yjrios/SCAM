@@ -28,12 +28,12 @@ const routes = [
         ]
       },
       {
-        path: 'app/pages',
-        component: () => import(/* webpackChunkName: "pages" */ './views/app/servicios'),
-        redirect: '/app/pages/maestro_servicios',
+        path: 'app/mttos',
+        component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos'),
+        redirect: '/app/mttos/maestro_servicios',
         children: [
-          { path: 'nuevo_servicio', component: () => import(/* webpackChunkName: "pages" */ './views/app/servicios/Nuevo_Servicio') },
-          { path: 'maestro_servicios', component: () => import(/* webpackChunkName: "pages" */ './views/app/servicios/Maestro_Servicios') }
+          { path: 'nuevo_mtto', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/NuevoMtto') },
+          { path: 'listado_mttos', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/ListadoMtto') }
         ]
       },
       {
