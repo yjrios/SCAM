@@ -7,7 +7,7 @@
                   <b-form-group :label="'Vehiculo a Realizar el Mtto'">
                     <b-form-input
                     v-model="placa"
-                    :state="validacion"
+                    :state="pla"
                     class=""
                     placeholder="INGRESE PLACA"
                      >
@@ -41,7 +41,11 @@
                  <b-row>
                   <b-colxx lg="3" md="12" >
                     <b-form-group :label="'Documento Sap'" :description="'ORDEN DE COMPRA O SOLPED'">
-                    <b-form-input type="text" :state="doc" v-model="doc_sap" :placeholder="'450003054'" />
+                    <b-form-input type="text"
+                    v-model="doc_sap"
+                    :placeholder="'450003054'"
+                    :state="doc"
+                    ref="doc_sap"/>
                     </b-form-group>
                   </b-colxx>
                    <b-colxx lg="4" md="12">
@@ -50,17 +54,19 @@
                         class="form-select"
                         :options="tipos"
                         v-model="id_tipo_mantenimiento"
-                        :state="cla"
+                        :state="tipM"
+                        ref="id_tipo_mantenimiento"
                       ></b-form-select>
                     </b-form-group>
                   </b-colxx>
-                  <b-colxx lg="3" md="12" >
+                  <b-colxx lg="4" md="12" >
                     <b-form-group :label="'Servicio'">
                       <b-form-select
                         class="form-select"
                         :options="servicios"
                         v-model="id_tipo_servicio"
-                        :state="cla"
+                        :state="tipS"
+                        ref="id_tipo_servicio"
                       ></b-form-select>
                     </b-form-group>
                   </b-colxx>
@@ -72,16 +78,29 @@
                        <b-form-input type="date"
                        v-model="fecha"
                        :state="fec"
+                       ref="fecha"
                        />
                       </b-form-group>
                     </div>
                   </b-colxx>
-                   <b-colxx lg="6" md="12">
+                  <b-colxx lg="4" md="12" >
+                    <b-form-group :label="'PROVEEDOR DEL SERVICIO'">
+                    <b-form-select
+                        class="form-select"
+                        :options="proveedores"
+                        v-model="id_proveedor"
+                        :state="pro"
+                        ref="proveedor"
+                      ></b-form-select>
+                    </b-form-group>
+                  </b-colxx>
+                   <b-colxx lg="5" md="12">
                     <b-form-group :label="'Observacion y Detalles'">
-                      <b-form-input type="text"
-                        v-model="id_marca"
-                        :state="mar"
-                      ></b-form-input>
+                      <b-form-textarea placeholder="Detalle aqui las observaciones..."
+                        v-model="observacion"
+                        :state="obs"
+                        ref="observacion"
+                      ></b-form-textarea>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="4" md="12">
@@ -104,17 +123,27 @@ export default ({
   name: 'formulariomtto',
   data: function () {
     return {
-      placa: '',
-      validacion: '',
+      placa: null,
+      doc_sap: null,
+      id_tipo_mantenimiento: null,
+      id_tipo_servicio: null,
+      fecha: null,
+      id_proveedor: null,
+      observacion: null, // hasta aqui formulario
+      pla: '',
+      doc: '',
+      tipM: '',
+      tipS: '',
+      fec: '',
+      pro: '',
+      obs: '',
       show: false,
       mensaje: '',
       tipo: '',
       titulo: '',
-      id_tipo_mantenimiento: null,
-      id_tipo_servicio: null,
       tipos: [],
       servicios: [],
-      fecha: ''
+      proveedores: []
     }
   },
   methods: {
@@ -123,7 +152,7 @@ export default ({
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false
-          this.validacion = false
+          this.pla = false
           this.mensaje = 'No existe placa registrada!'
           this.tipo = 'error filled'
           this.titulo = 'Notificacion'
@@ -131,7 +160,7 @@ export default ({
           return
         }
         this.show = true
-        this.validacion = true
+        this.pla = true
         this.mensaje = 'Vehiculo Encontrado!'
         this.tipo = 'success filled'
         this.titulo = 'Notificacion'
@@ -155,6 +184,48 @@ export default ({
     },
     formato (date) {
       return moment(date).format('DD-MM-YYYY')
+    },
+    guardar (e) {
+      if (!this.doc_sap) {
+        this.doc = false
+        this.$refs.doc_sap.focus()
+        return true
+      }
+      if (!this.id_tipo_mantenimiento) {
+        this.tipM = false
+        return true
+      }
+      if (!this.id_tipo_servicio) {
+        this.tipS = false
+        this.$refs.id_tipo_servicio.focus()
+        return true
+      }
+      if (!this.fecha) {
+        this.fec = false
+        this.$refs.fecha.focus()
+        return true
+      }
+      if (!this.id_proveedor) {
+        this.pro = false
+        this.$refs.proveedor.focus()
+        return true
+      }
+      if (!this.observacion) {
+        this.obs = false
+        this.$refs.observacion.focus()
+        return true
+      }
+      e.preventDefault()
+      const fechaf = this.formato(this.fecha)
+      const body = {
+        id_vehiculo: this.datos.id,
+        doc_sap: this.doc_sap,
+        id_mtto: this.id_tipo_mantenimiento,
+        id_serrvicio: this.id_tipo_servicio,
+        fecha: fechaf,
+        proveedor: this.id_proveedor,
+        observacion: this.observacion
+      }
     }
   },
   computed: {
@@ -176,6 +247,15 @@ export default ({
         return { text: item.servicio, value: item.id }
       })
       this.servicios = [{ text: 'SELECCIONE', value: null }, ...servicios]
+    }).catch(error => {
+      console.log('error', error)
+    })
+    axios.get(this.dirapi + '/proveedores').then(response => {
+      console.log('response', response)
+      const proveedores = response.data.map(item => {
+        return { text: item.proveedor, value: item.id }
+      })
+      this.proveedores = [{ text: 'SELECCIONE', value: null }, ...proveedores]
     }).catch(error => {
       console.log('error', error)
     })
