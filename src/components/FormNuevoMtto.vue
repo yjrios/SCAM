@@ -218,14 +218,35 @@ export default ({
       e.preventDefault()
       const fechaf = this.formato(this.fecha)
       const body = {
-        id_vehiculo: this.datos.id,
+        id_vehiculo: this.datos.id_v,
+        id_kilometraje: this.datos.id_km,
         doc_sap: this.doc_sap,
-        id_mtto: this.id_tipo_mantenimiento,
-        id_serrvicio: this.id_tipo_servicio,
+        id_tipo: this.id_tipo_mantenimiento,
+        id_servicio: this.id_tipo_servicio,
         fecha: fechaf,
-        proveedor: this.id_proveedor,
+        id_proveedor: this.id_proveedor,
         observacion: this.observacion
       }
+      axios.post(this.dirapi + '/addService', body).then(response => {
+        console.log('response', response)
+        if (response.data.message === 'Exito!') {
+          this.mensaje = 'Mantenimiento registrado con exito!'
+          this.tipoM = 'success filled'
+          this.titulo = 'Guardar'
+          this.addNotification()
+          // this.name = '' // limpiar
+          this.id_v = null
+          this.id_km = null
+          this.doc_sap = null
+          this.id_tipo_mantenimiento = null
+          this.id_tipo_servicio = null
+          this.fecha = null
+          this.id_proveedor = null
+          this.observacion = null
+        }
+      }).catch(error => {
+        console.log('error', error)
+      })
     }
   },
   computed: {
