@@ -17,6 +17,7 @@
                 </b-form>
         </b-card>
       </b-colxx>
+      <transition name="slide-fade">
       <b-colxx lg="8" md="12" v-if="show">
         <b-card class="mb-2">
          <b-row>
@@ -34,7 +35,9 @@
             </b-row>
         </b-card>
       </b-colxx>
+      </transition>
       </b-row>
+      <transition name="slide-fade">
       <b-card v-if="show">
         <p class="azul h6">Datos del servicio</p><br>
               <b-form @submit.prevent="guardar" id="formu">
@@ -109,7 +112,7 @@
                   <b-button type="submit" variant="primary" class="mt-4" @click="guardar()" @keyup.enter="guardar">Guardar</b-button>
               </b-form>
    </b-card>
-
+  </transition>
       </div>
 </template>
 
@@ -180,7 +183,7 @@ export default ({
       title = this.titulo,
       message = this.mensaje
     ) {
-      this.$notify(type, title, message, { duration: 3000, permanent: false })
+      this.$notify(type, title, message, { duration: 6000, permanent: false })
     },
     formato (date) {
       return moment(date).format('DD-MM-YYYY')
@@ -216,7 +219,7 @@ export default ({
         return true
       }
       e.preventDefault()
-      const fechaf = this.formato(this.fecha)
+      const fechaf = this.fecha
       const body = {
         id_vehiculo: this.datos.id_v,
         id_kilometraje: this.datos.id_km,
@@ -228,9 +231,9 @@ export default ({
         observacion: this.observacion
       }
       axios.post(this.dirapi + '/addService', body).then(response => {
-        console.log('response', response)
+        console.log('response servicio', response)
         if (response.data.message === 'Exito!') {
-          this.mensaje = 'Mantenimiento registrado con exito!'
+          this.mensaje = 'Mantenimiento registrado con exito numero:  ' + response.data.doc
           this.tipoM = 'success filled'
           this.titulo = 'Guardar'
           this.addNotification()
@@ -286,7 +289,7 @@ export default ({
 </script>
 
 <style scoped>
-    .slide-fade-enter-active {
+.slide-fade-enter-active {
   transition: all .5s ease;
 }
 .slide-fade-leave-active {

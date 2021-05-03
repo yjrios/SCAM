@@ -8,13 +8,19 @@
     </b-row>
     <b-row>
       <b-colxx xxs="12" >
-        <b-card class="mb-2">
-            <h4>Listado de Mttos</h4>
-        </b-card>
-        <b-card>
-
-        </b-card>
+          <Listado/>
       </b-colxx>
     </b-row>
   </div>
 </template>
+
+<script>
+import Listado from '@/components/ListaM.vue'
+
+export default {
+  name: 'listadommto',
+  components: {
+    Listado
+  }
+}
+</script>
