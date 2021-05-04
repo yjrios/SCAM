@@ -80,14 +80,20 @@
         >
           <router-link tag="li" to="/app/mttos/nuevo_mtto">
             <a>
-              <i class="simple-icon-paper-plane"></i>
+              <i class="iconsminds-paper"></i>
               <span>Nuevo Mtto</span>
             </a>
           </router-link>
           <router-link tag="li" to="/app/mttos/listado_mttos">
             <a>
-              <i class="simple-icon-paper-plane"></i>
+              <i class="iconsminds-check"></i>
               <span>Listado de Mttos</span>
+            </a>
+          </router-link>
+          <router-link tag="li" to="/app/mttos/visualizar_mtto">
+            <a>
+              <i class="iconsminds-magnifi-glass"></i>
+              <span>Visualizar Mttos</span>
             </a>
           </router-link>
         </ul>
