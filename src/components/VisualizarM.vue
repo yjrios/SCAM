@@ -34,7 +34,7 @@
                     </div>
                     <b-card-body>
                         <h6 class="mb-4 card-subtitle">{{datos.modelo}}</h6>
-                        <h6>KILOMETRAJE DEL MTTO : {{datos.kilometraje}} KM </h6><br>
+                        <h6>KM DEL VEHICULO EN EL MTTO : {{datos.kilometraje}} KM </h6><br>
                         <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
                     </b-card-body>
                 </b-card>
@@ -48,16 +48,17 @@
                 <p class="azul">DOCUMENTO SAP ASOCIADO : <span class="nada"> {{datos.doc_sap}}</span></p>
                 <p class="azul">TIPO DE MANTENIMIENTO : <span class="nada"> {{datos.categoria}} </span></p>
                 <p class="azul">FECHA DEL SERVICIO :<span class="nada"> {{datos.fecha}} </span></p>
-                <p class="azul">PROVEEDOR :<span class="nada"> {{datos.proveedor}} </span></p>
               </b-colxx>
               <b-colxx  lg="6" md="12">
-                <p class="azul">SERVICIO : <span class="verde"> {{datos.servicio}} </span></p>
-                <p class="azul">DETALLES :<span class="nada"> {{datos.observacion}} </span>  </p>
                 <p class="azul">PLACA : <span class="nada">{{datos.placa}}</span></p>
                 <p class="azul">MODELO :<span class="nada"> {{datos.modelo}}</span> </p>
                 <p class="azul">COLOR :<span class="nada"> {{datos.color}} </span></p>
+                <p class="azul">PROVEEDOR :<span class="nada"> {{datos.proveedor}} </span></p>
                 </b-colxx>
             </b-row>
+            <div class="separator mb-3"></div>
+                <p class="azul">SERVICIO : <span class="verde"> {{datos.servicio}} </span></p>
+                <p class="azul">DETALLES :<span class="nada"> {{datos.observacion}} </span>  </p>
                 <!--<p class="text-muted text-small mb-2">Parrafo</p>
                 <h5 class="mb-4 card-title">Homemade Cheesecake with Fresh Berries and Mint</h5>
                 <h6 class="mb-4 card-subtitle">Cheesecake with Fresh Berries and Mint</h6>

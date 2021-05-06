@@ -16,13 +16,14 @@
         <mobile-menu-icon />
       </a>
     </div>
-
-    <div>
-      <img src="/assets/img/scam2.jpg">
-    </div>
-
+    <router-link class="navbar-logo" tag="a" to="/app">
+      <span class="logo d-none d-xs-block"></span>
+      <span class="logo-mobile d-block d-xs-none"></span>
+    </router-link>
+    <!-- <img src="/assets/img/scam2.jpg">
+       <span class="logo-single"/>-->
     <div class="navbar-right">
-      <div class="d-none d-md-inline-block align-middle mr-3">
+       <div class="d-none d-md-inline-block align-middle mr-3">
         <switches
           id="tool-mode-switch"
           v-model="isDarkActive"
@@ -44,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="user d-inline-block">
+      <div class="user d-inline-block ">
         <b-dropdown
           class="dropdown-menu-right"
           right

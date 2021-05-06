@@ -38,7 +38,7 @@
       </transition>
       </b-row>
       <transition name="slide-fade">
-      <b-card v-if="show">
+      <b-card class='v-if="show"'>
         <p class="azul h6">Datos del servicio</p><br>
               <b-form @submit.prevent="guardar" id="formu">
                  <b-row>
@@ -98,7 +98,7 @@
                     </b-form-group>
                   </b-colxx>
                    <b-colxx lg="5" md="12">
-                    <b-form-group :label="'Observacion y Detalles'">
+                    <b-form-group :label="'OBSERVACION Y DETALLES'">
                       <b-form-textarea placeholder="Detalle aqui las observaciones..."
                         v-model="observacion"
                         :state="obs"
@@ -106,7 +106,31 @@
                       ></b-form-textarea>
                     </b-form-group>
                   </b-colxx>
-                  <b-colxx lg="4" md="12">
+                 </b-row>
+                 <b-row>
+                  <b-colxx lg="2" md="12">
+                    <b-form-group :label="'PRECIO USD'">
+                      <b-form-input
+                      v-model="precio"
+                      :state="pre"
+                      placeholder="500 USD"
+                      :type="'number'"
+                      step=".01"
+                      ref="precio"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                  </b-colxx>
+                  <b-colxx lg="3" md="12">
+                    <b-form-group :label="'STATUS DE PAGO'">
+                       <b-form-select
+                        class="form-select"
+                        :options="opciones_pago"
+                        v-model="id_status_pago"
+                        :state="sta"
+                        ref="status"
+                      ></b-form-select>
+                    </b-form-group>
                   </b-colxx>
                  </b-row>
                   <b-button type="submit" variant="primary" class="mt-4" @click="guardar()" @keyup.enter="guardar">Guardar</b-button>
@@ -132,7 +156,9 @@ export default ({
       id_tipo_servicio: null,
       fecha: null,
       id_proveedor: null,
-      observacion: null, // hasta aqui formulario
+      observacion: null,
+      id_status_pago: null,
+      precio: null, // hasta aqui formulario
       pla: '',
       doc: '',
       tipM: '',
@@ -140,13 +166,16 @@ export default ({
       fec: '',
       pro: '',
       obs: '',
+      pre: '',
+      sta: '',
       show: false,
       mensaje: '',
       tipo: '',
       titulo: '',
       tipos: [],
       servicios: [],
-      proveedores: []
+      proveedores: [],
+      opciones_pago: []
     }
   },
   methods: {
@@ -218,6 +247,16 @@ export default ({
         this.$refs.observacion.focus()
         return true
       }
+      if (!this.precio) {
+        this.pre = false
+        this.$refs.precio.focus()
+        return true
+      }
+      if (!this.id_status_pago) {
+        this.est = false
+        this.$refs.status.focus()
+        return true
+      }
       e.preventDefault()
       const fechaf = this.fecha
       const body = {
@@ -228,7 +267,9 @@ export default ({
         id_servicio: this.id_tipo_servicio,
         fecha: fechaf,
         id_proveedor: this.id_proveedor,
-        observacion: this.observacion
+        observacion: this.observacion,
+        id_status_pago: this.id_status_pago,
+        precio: this.precio
       }
       axios.post(this.dirapi + '/addService', body).then(response => {
         console.log('response servicio', response)
@@ -246,6 +287,8 @@ export default ({
           this.fecha = null
           this.id_proveedor = null
           this.observacion = null
+          this.id_status_pago = null
+          this.precio = null
         }
       }).catch(error => {
         console.log('error', error)
@@ -280,6 +323,15 @@ export default ({
         return { text: item.proveedor, value: item.id }
       })
       this.proveedores = [{ text: 'SELECCIONE', value: null }, ...proveedores]
+    }).catch(error => {
+      console.log('error', error)
+    })
+    axios.get(this.dirapi + '/statuspago').then(response => {
+      console.log('response', response)
+      const opciones = response.data.map(item => {
+        return { text: item.status_pago, value: item.id }
+      })
+      this.opciones_pago = [{ text: 'SELECCIONE', value: null }, ...opciones]
     }).catch(error => {
       console.log('error', error)
     })

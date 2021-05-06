@@ -78,7 +78,7 @@
           data-link="mttos"
           :class="{'d-block':selectedParentMenu==='mttos' }"
         >
-          <router-link tag="li" to="/app/mttos/nuevo_mtto">
+         <router-link tag="li" to="/app/mttos/nuevo_mtto">
             <a>
               <i class="iconsminds-paper"></i>
               <span>Nuevo Mtto</span>
