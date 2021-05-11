@@ -28,17 +28,38 @@
           </b-row>
         </b-card>
         <transition name='slide-fade'>
-        <b-card v-if="show">
-          <b-table
-              id="table-transition-example"
-              :items= listaM
-              :fields="fields"
-              striped
-              hover
-              primary-key="fecha"
-              :tbody-transition-props="transProps">
-            </b-table>
-        </b-card>
+          <b-card v-if="show">
+            <div id="app">
+              <ejs-grid ref="grid"
+              :dataSource="listaM"
+              :allowPaging="true"
+              :pageSettings=pageSettings
+              :allowSorting="true"
+              :allowFiltering="true"
+              :allowPdfExport="true"
+              :allowExcelExport="true"
+              :toolbar="toolbarOptions"
+              :toolbarClick="gridExport">
+                <e-columns>
+                  <e-column field= "fecha" headerText="Fecha" textAlign="center"></e-column>
+                  <e-column field= "id_mtto" headerText="Mantenimiento" textAlign="center"></e-column>
+                  <e-column field= "modelo" headerText="Modelo" textAlign="center" ></e-column>
+                  <e-column field= "placa" headerText="Placa" textAlign="center" ></e-column>
+                  <e-column field= "categoria" headerText="Tipo" textAlign="center" ></e-column>
+                  <e-column field= "carga" headerText="Carga" textAlign="center" ></e-column>
+                  <e-column field= "servicio" headerText="Servicio Realizado" textAlign="center" ></e-column>
+                  <e-column field= "precio" headerText="Costo Servicio" textAlign="center" format="c2"></e-column>
+                </e-columns>
+                <!--<e-aggregates>
+                  <e-aggregate>
+                    <e-columns>
+                    <e-column type="Sum" field="precio" :footerTemplate='footerSum'></e-column>
+                    </e-columns>
+                  </e-aggregate>
+                </e-aggregates> -->
+              </ejs-grid>
+            </div>
+          </b-card>
         </transition>
 </div>
 </template>
@@ -47,57 +68,43 @@
 
 import { mapState } from 'vuex'
 import axios from 'axios'
+import Vue from 'vue'
+import { Page, Sort, Filter, Toolbar, PdfExport, ExcelExport, Aggregate } from '@syncfusion/ej2-vue-grids'
 
-// import DataTables from 'datatables'
-
-import JQuery from 'jquery'
-let $ = JQuery
+// nuevo
+// import Vue from 'vue'
+// import('@syncfusion/ej2-vue-grids').PdfExportProperties
 
 export default {
   name: 'listadomtto',
   data: function () {
     return {
-      transProps: {
-        // Transition nombre
-        name: 'flip-list'
-      },
-      fields: [{
-        key: 'fecha',
-        label: 'Fecha',
-        sortable: true
-      },
-      {
-        key: 'id_mtto',
-        label: 'Nro Mantenimiento',
-        sortable: true
-      },
-      {
-        key: 'modelo',
-        label: 'Modelo',
-        sortable: true
-      },
-      {
-        key: 'placa',
-        label: 'Placa',
-        sortable: true
-      },
-      {
-        key: 'categoria',
-        label: 'Tipo',
-        sortable: true
-      },
-      {
-        key: 'servicio',
-        label: 'Servicio realizado',
-        sortable: true
-      }],
       listaM: [],
       desde: null,
       hasta: null,
       show: false,
       des: '',
-      has: ''
+      has: '',
+      data: this.listaM,
+      footerSum: function () {
+        return {
+          template: Vue.component('Sum', {
+            template: `<span>Suma: {{listaM.Sum}}</span>`,
+            data () {
+              return {
+                data: {}
+              }
+            }
+          })
+        }
+      },
+      pageSettings: { pageSize: 5 },
+      toolbarOptions: ['ExcelExport', 'PdfExport']
     }
+  },
+  // nuevo
+  provide: {
+    grid: [Page, Sort, Filter, Toolbar, PdfExport, ExcelExport, Aggregate]
   },
   methods: {
     cargarM (e) {
@@ -116,25 +123,77 @@ export default {
         console.log('response datos', response.data.data)
         this.listaM = response.data.data
         this.show = true
-        // this.tabla()
       }).catch(error => {
         console.log('error', error)
       })
-    },
-    tabla () {
-      $(function () {
-        $('#table-transition-example').DataTable(
-          {
-            dom: 'Bfrtip',
-            buttons: [
-              'copyHtml5',
-              'excelHtml5',
-              'csvHtml5',
-              'pdfHtml5'
-            ]
-          }
-        )
-      })
+    }, // nuevo
+    gridExport (args) {
+      var girdInst = this.$refs.grid
+      if (girdInst) {
+        if (args.item.id.includes('pdfexport')) {
+          girdInst.pdfExport({
+            fileName: 'listado.pdf',
+            // exportType: 'CurrentPage',
+            theme: {
+              header: {
+                bold: true,
+                fontName: 'Calibri',
+                fontSize: 10
+              },
+              record: {
+                fontColor: '#000000',
+                fontName: 'Calibri',
+                fontSize: 8
+              }
+            },
+            header: {
+              fromTop: 0,
+              height: 130,
+              contents: [{
+                type: 'Text',
+                value: 'Listado de vehiculos',
+                position: { x: 0, y: 50 },
+                style: { fontSize: 20 }
+              }]
+            },
+            footer: {
+              contents: [{
+                type: 'Text',
+                value: 'FIN DE LA LISTA',
+                position: { x: 0, y: 50 },
+                style: { fontSize: 20 }
+              }],
+              fromBottom: 130,
+              height: 130
+            }
+          })
+        } else if (args.item.id.includes('excelexport')) {
+          girdInst.excelExport({
+            fileName: 'listado.xlsx',
+            // exportType: 'CurrentPage',
+            header: {
+              headerRows: 1,
+              rows: [{
+                cells: [{
+                  colSpan: 4,
+                  value: 'lISTADO DE SERVICIOS REALIZADOS',
+                  style: { fontSize: 20, hAlign: 'Center', bold: true }
+                }]
+              }]
+            },
+            footer: {
+              footerRows: 1,
+              rows: [{
+                cells: [{
+                  colSpan: 4,
+                  value: 'FIN DE LA LISTA',
+                  style: { fontSize: 20, hAlign: 'Center', bold: true }
+                }]
+              }]
+            }
+          })
+        }
+      }
     }
   },
   computed: {
@@ -154,5 +213,9 @@ export default {
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+
+.e-grid .e-gridpager .e-currentitem{
+  background-color:rgb(0, 0, 182);
 }
 </style>

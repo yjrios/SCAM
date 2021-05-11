@@ -29,6 +29,9 @@ import VueScrollTo from 'vue-scrollto'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
+import { GridPlugin } from '@syncfusion/ej2-vue-grids'
+
+Vue.use(GridPlugin)
 Vue.use(BootstrapVue)
 Vue.use(VueI18n)
 

@@ -48,12 +48,14 @@
                 <p class="azul">DOCUMENTO SAP ASOCIADO : <span class="nada"> {{datos.doc_sap}}</span></p>
                 <p class="azul">TIPO DE MANTENIMIENTO : <span class="nada"> {{datos.categoria}} </span></p>
                 <p class="azul">FECHA DEL SERVICIO :<span class="nada"> {{datos.fecha}} </span></p>
+                <p class="azul">STATUS DE PAGO :<span :class="pago"> {{datos.status_pago}} </span></p>
               </b-colxx>
               <b-colxx  lg="6" md="12">
                 <p class="azul">PLACA : <span class="nada">{{datos.placa}}</span></p>
                 <p class="azul">MODELO :<span class="nada"> {{datos.modelo}}</span> </p>
                 <p class="azul">COLOR :<span class="nada"> {{datos.color}} </span></p>
-                <p class="azul">PROVEEDOR :<span class="nada"> {{datos.proveedor}} </span></p>
+                <p class="azul">PROVEEDOR :<span class='nada'> {{datos.proveedor}} </span></p>
+                <p class="azul">PRECIO :<span class="nada"> {{datos.precio}} USD</span></p>
                 </b-colxx>
             </b-row>
             <div class="separator mb-3"></div>
@@ -84,7 +86,8 @@ export default ({
       titulo: '',
       validacion: '',
       statusc: '',
-      datos: {}
+      datos: {},
+      pago: ''
     }
   },
   methods: {
@@ -95,7 +98,7 @@ export default ({
         if (response.status === 204) {
           this.show = false // false
           this.validacion = false
-          this.mensaje = 'No existe Mantenimiento registrada!'
+          this.mensaje = 'No existe Mantenimiento registrado!'
           this.tipo = 'error filled'
           this.titulo = 'Notificacion'
           this.addNotification()
@@ -113,6 +116,11 @@ export default ({
           this.statusc = 'success'
         } else {
           this.statusc = 'danger'
+        }
+        if (this.datos.status_pago === 'PAGADO') {
+          this.pago = 'verde'
+        } else if (this.datos.status_pago === 'NO PAGADO') {
+          this.pago = 'rojo'
         }
       }).catch(error => {
         console.log('error', error)
@@ -154,6 +162,10 @@ export default ({
 }
 .verde {
   color:#009443;
+  font-weight: normal;
+}
+.rojo {
+  color:#d10000;
   font-weight: normal;
 }
 

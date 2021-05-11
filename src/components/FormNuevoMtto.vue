@@ -38,7 +38,7 @@
       </transition>
       </b-row>
       <transition name="slide-fade">
-      <b-card class='v-if="show"'>
+      <b-card v-if="show">
         <p class="azul h6">Datos del servicio</p><br>
               <b-form @submit.prevent="guardar" id="formu">
                  <b-row>
@@ -113,7 +113,7 @@
                       <b-form-input
                       v-model="precio"
                       :state="pre"
-                      placeholder="500 USD"
+                      placeholder="100,00 USD"
                       :type="'number'"
                       step=".01"
                       ref="precio"
