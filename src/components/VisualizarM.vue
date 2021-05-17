@@ -34,7 +34,7 @@
                     </div>
                     <b-card-body>
                         <h6 class="mb-4 card-subtitle">{{datos.modelo}}</h6>
-                        <h6>KM DEL VEHICULO EN EL MTTO : {{datos.kilometraje}} KM </h6><br>
+                        <h6>KM DEL MTTO : {{datos.kilometraje}} KM </h6><br>
                         <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
                     </b-card-body>
                 </b-card>
@@ -47,13 +47,15 @@
                 <p class="azul">ORDEN DE MTTO NRO : <span class="nada">{{datos.id_mtto}}</span></p>
                 <p class="azul">DOCUMENTO SAP ASOCIADO : <span class="nada"> {{datos.doc_sap}}</span></p>
                 <p class="azul">TIPO DE MANTENIMIENTO : <span class="nada"> {{datos.categoria}} </span></p>
-                <p class="azul">FECHA DEL SERVICIO :<span class="nada"> {{datos.fecha}} </span></p>
+                <p class="azul">FECHA DE SOLICITUD SERVICIO :<span class="nada"> {{datos.fecha_sol}} </span></p>
                 <p class="azul">STATUS DE PAGO :<span :class="pago"> {{datos.status_pago}} </span></p>
+                <p class="azul">STATUS DEL MTTO :<span class="nada"> {{datos.status_mtto}} </span></p>
               </b-colxx>
               <b-colxx  lg="6" md="12">
                 <p class="azul">PLACA : <span class="nada">{{datos.placa}}</span></p>
                 <p class="azul">MODELO :<span class="nada"> {{datos.modelo}}</span> </p>
                 <p class="azul">COLOR :<span class="nada"> {{datos.color}} </span></p>
+                <p class="azul">FECHA DE EJECUCION SERVICIO :<span class="nada"> {{datos.fecha}} </span></p>
                 <p class="azul">PROVEEDOR :<span class='nada'> {{datos.proveedor}} </span></p>
                 <p class="azul">PRECIO :<span class="nada"> {{datos.precio}} USD</span></p>
                 </b-colxx>
@@ -93,7 +95,7 @@ export default ({
   methods: {
     buscar () {
       const orden = this.orden
-      axios.get(this.dirapi + '/getService/' + orden).then(response => {
+      axios.get(this.dirapi + '/getMtto/' + orden).then(response => {
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false

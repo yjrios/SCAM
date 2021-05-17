@@ -96,6 +96,12 @@
               <span>Visualizar Mttos</span>
             </a>
           </router-link>
+          <router-link tag="li" to="/app/mttos/editar_mtto">
+            <a>
+              <i class="iconsminds-file-edit"></i>
+              <span>Actualizar Mtto</span>
+            </a>
+          </router-link>
         </ul>
 
         <ul

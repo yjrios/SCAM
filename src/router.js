@@ -34,7 +34,8 @@ const routes = [
         children: [
           { path: 'nuevo_mtto', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/NuevoMtto') },
           { path: 'listado_mttos', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/ListadoMtto') },
-          { path: 'visualizar_mtto', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/Visualizar') }
+          { path: 'visualizar_mtto', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/Visualizar') },
+          { path: 'editar_mtto', component: () => import(/* webpackChunkName: "pages" */ './views/app/mttos/Editar') }
         ]
       },
       {

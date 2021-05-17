@@ -42,28 +42,28 @@
         <p class="azul h6">Datos del servicio</p><br>
               <b-form @submit.prevent="guardar" id="formu">
                  <b-row>
-                  <b-colxx lg="3" md="12" >
-                    <b-form-group :label="'Documento Sap'" :description="'ORDEN DE COMPRA O SOLPED'">
-                    <b-form-input type="text"
-                    v-model="doc_sap"
-                    :placeholder="'450003054'"
-                    :state="doc"
-                    ref="doc_sap"/>
+                  <b-colxx lg="2" md="12" >
+                    <b-form-group :label="'FECHA SOLICITUD'">
+                       <b-form-input type="date"
+                       v-model="fecha_sol"
+                       :state="fecS"
+                       ref="fecha_sol"
+                       />
                     </b-form-group>
                   </b-colxx>
-                   <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Tipo de Mantenimiento'">
-                      <b-form-select
-                        class="form-select"
-                        :options="tipos"
-                        v-model="id_tipo_mantenimiento"
-                        :state="tipM"
-                        ref="id_tipo_mantenimiento"
-                      ></b-form-select>
-                    </b-form-group>
+                   <b-colxx lg="2" md="12">
+                    <div>
+                      <b-form-group :label="'FECHA EJECUCION'">
+                       <b-form-input type="date"
+                       v-model="fecha"
+                       :state="fec"
+                       ref="fecha"
+                       />
+                      </b-form-group>
+                    </div>
                   </b-colxx>
-                  <b-colxx lg="4" md="12" >
-                    <b-form-group :label="'Servicio'">
+                  <b-colxx lg="7" md="12" >
+                    <b-form-group :label="'SERVICIO'">
                       <b-form-select
                         class="form-select"
                         :options="servicios"
@@ -76,17 +76,17 @@
                  </b-row>
                  <b-row>
                   <b-colxx lg="2" md="12" >
-                    <div>
-                      <b-form-group :label="'Fecha del servicio'">
-                       <b-form-input type="date"
-                       v-model="fecha"
-                       :state="fec"
-                       ref="fecha"
-                       />
-                      </b-form-group>
-                    </div>
+                    <b-form-group :label="'TIPO DE MANTENIMIENTO'">
+                      <b-form-select
+                        class="form-select"
+                        :options="tipos"
+                        v-model="id_tipo_mantenimiento"
+                        :state="tipM"
+                        ref="id_tipo_mantenimiento"
+                      ></b-form-select>
+                    </b-form-group>
                   </b-colxx>
-                  <b-colxx lg="4" md="12" >
+                  <b-colxx lg="3" md="12" >
                     <b-form-group :label="'PROVEEDOR DEL SERVICIO'">
                     <b-form-select
                         class="form-select"
@@ -97,7 +97,7 @@
                       ></b-form-select>
                     </b-form-group>
                   </b-colxx>
-                   <b-colxx lg="5" md="12">
+                   <b-colxx lg="6" md="12">
                     <b-form-group :label="'OBSERVACION Y DETALLES'">
                       <b-form-textarea placeholder="Detalle aqui las observaciones..."
                         v-model="observacion"
@@ -121,7 +121,7 @@
                       </b-form-input>
                     </b-form-group>
                   </b-colxx>
-                  <b-colxx lg="3" md="12">
+                  <b-colxx lg="2" md="12">
                     <b-form-group :label="'STATUS DE PAGO'">
                        <b-form-select
                         class="form-select"
@@ -130,6 +130,15 @@
                         :state="sta"
                         ref="status"
                       ></b-form-select>
+                    </b-form-group>
+                  </b-colxx>
+                  <b-colxx lg=3 md="12">
+                    <b-form-group :label="'DOCUMENTO SAP'" :description="'ORDEN DE COMPRA O SOLPED'">
+                      <b-form-input type="text"
+                      v-model="doc_sap"
+                      :placeholder="'450003054'"
+                      :state="doc"
+                      ref="doc_sap"/>
                     </b-form-group>
                   </b-colxx>
                  </b-row>
@@ -155,6 +164,8 @@ export default ({
       id_tipo_mantenimiento: null,
       id_tipo_servicio: null,
       fecha: null,
+      fecha_sol: null,
+      status: null,
       id_proveedor: null,
       observacion: null,
       id_status_pago: null,
@@ -163,7 +174,7 @@ export default ({
       doc: '',
       tipM: '',
       tipS: '',
-      fec: '',
+      fecS: '',
       pro: '',
       obs: '',
       pre: '',
@@ -218,10 +229,17 @@ export default ({
       return moment(date).format('DD-MM-YYYY')
     },
     guardar (e) {
-      if (!this.doc_sap) {
-        this.doc = false
-        this.$refs.doc_sap.focus()
+      if (!this.fecha_sol) {
+        this.fecS = false
+        this.$refs.fecha_sol.focus()
         return true
+      }
+      if (!this.fecha) {
+        this.fecha = ''
+        this.status = 1
+      }
+      if (this.fecha) {
+        this.status = 2
       }
       if (!this.id_tipo_mantenimiento) {
         this.tipM = false
@@ -230,11 +248,6 @@ export default ({
       if (!this.id_tipo_servicio) {
         this.tipS = false
         this.$refs.id_tipo_servicio.focus()
-        return true
-      }
-      if (!this.fecha) {
-        this.fec = false
-        this.$refs.fecha.focus()
         return true
       }
       if (!this.id_proveedor) {
@@ -257,19 +270,25 @@ export default ({
         this.$refs.status.focus()
         return true
       }
+      if (!this.doc_sap) {
+        this.doc = false
+        this.$refs.doc_sap.focus()
+        return true
+      }
       e.preventDefault()
-      const fechaf = this.fecha
       const body = {
         id_vehiculo: this.datos.id_v,
         id_kilometraje: this.datos.id_km,
         doc_sap: this.doc_sap,
         id_tipo: this.id_tipo_mantenimiento,
         id_servicio: this.id_tipo_servicio,
-        fecha: fechaf,
+        fecha: this.fecha,
+        fecha_sol: this.fecha_sol,
         id_proveedor: this.id_proveedor,
         observacion: this.observacion,
         id_status_pago: this.id_status_pago,
-        precio: this.precio
+        precio: this.precio,
+        status: this.status
       }
       axios.post(this.dirapi + '/addService', body).then(response => {
         console.log('response servicio', response)
