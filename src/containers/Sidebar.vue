@@ -16,6 +16,7 @@
             <a @click.prevent="openSubMenu($event,'piaf')" href="#piaf">
               <i class="simple-icon-speedometer"></i>
               <span>{{ $t("menu.piaf") }}</span>
+              <span>y Admin</span>
             </a>
           </li>
 
@@ -56,8 +57,20 @@
         >
           <router-link tag="li" to="/app/piaf/start">
             <a>
-              <i class="simple-icon-paper-plane"></i>
+              <i class="simple-icon-plus"></i>
               <span>{{ $t("menu.start") }}</span>
+            </a>
+          </router-link>
+           <router-link tag="li" to="/app/piaf/status">
+            <a>
+              <i class="simple-icon-power"></i>
+              <span>Status de Vehiculos</span>
+            </a>
+          </router-link>
+          <router-link tag="li" to="/app/piaf/historial">
+            <a>
+              <i class="iconsminds-check"></i>
+              <span>Historico por Vehiculo</span>
             </a>
           </router-link>
         </ul>

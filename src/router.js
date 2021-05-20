@@ -16,7 +16,9 @@ const routes = [
         component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf'),
         redirect: '/app/piaf/start',
         children: [
-          { path: 'start', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Start') }
+          { path: 'start', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Start') },
+          { path: 'status', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Status') },
+          { path: 'historial', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Historico') }
         ]
       },
       {

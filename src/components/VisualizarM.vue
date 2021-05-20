@@ -66,7 +66,8 @@
                 <!--<p class="text-muted text-small mb-2">Parrafo</p>
                 <h5 class="mb-4 card-title">Homemade Cheesecake with Fresh Berries and Mint</h5>
                 <h6 class="mb-4 card-subtitle">Cheesecake with Fresh Berries and Mint</h6>
-                <p class="card-text text-muted text-small mb-0 font-weight-light">09.04.2018</p>-->
+                <p class="card-text text-muted text-small mb-0 font-weight-light">09.04.2018</p>
+                <span class="h6"> Inicio | Mantenimientos | Nuevo Mtto </span>-->
             </b-card>
         </b-colxx>
     </b-row>
