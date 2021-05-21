@@ -53,6 +53,7 @@
                   <e-column field= "modelo" headerText="Modelo" textAlign="center"></e-column>
                   <e-column field= "fecha" headerText="Fecha" textAlign="center" ></e-column>
                   <e-column field= "status" headerText="Status" textAlign="center" ></e-column>
+                   <e-column field= "dias" headerText="Dias" textAlign="center" ></e-column>
                   <e-column field= "detalles" headerText="Motivo" textAlign="center" ></e-column>
                 </e-columns>
                 <!--<e-aggregates>
@@ -111,12 +112,15 @@ export default {
         this.has = false
         return true
       }
+      if (!this.placa) {
+        this.pla = false
+        return true
+      }
       e.preventDefault()
       const desde = this.desde
       const hasta = this.hasta
       const placa = this.placa
       axios.get(this.dirapi + '/getHistorico?placa=' + placa + '&desde=' + desde + '&hasta=' + hasta).then(response => {
-        console.log('response datos', response.data.data)
         this.listaM = response.data.data
         this.show = true
       }).catch(error => {
@@ -172,7 +176,7 @@ export default {
               rows: [{
                 cells: [{
                   colSpan: 4,
-                  value: 'lISTADO DE SERVICIOS REALIZADOS',
+                  value: 'LISTADO DE OPERATIVIDAD DEL VEHICULO',
                   style: { fontSize: 20, hAlign: 'Center', bold: true }
                 }]
               }]

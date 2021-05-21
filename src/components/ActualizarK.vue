@@ -151,7 +151,7 @@ export default ({
           this.addNotification()
           return
         }
-        this.show = true
+        this.show = false
         this.validacion = true
         this.mensaje = 'Kilometraje actualizado!'
         this.tipo = 'success filled'

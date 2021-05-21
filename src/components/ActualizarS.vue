@@ -53,7 +53,6 @@
                 <p class="azul">AÑO :<span class="nada"> {{datos.ano}} </span>  </p>
                 <p class="azul"> COLOR :<span class="nada"> {{datos.color}}</span> </p>
                 <p class="azul">KILOMETRAJE ACTUAL :<span class="nada"> {{datos.km}} km </span></p>
-                <p class="azul">ULTIMA ACTUALIZACION :<span class="nada">  {{datos.fecha}}</span></p>
                 </b-colxx>
             </b-row>
           </b-card>
@@ -134,6 +133,7 @@ export default ({
       detalle: null,
       valor: null,
       fecha: null,
+      placa: null,
       statusv: ''
     }
   },
@@ -170,7 +170,11 @@ export default ({
       })
     },
     guardar (e) {
-      console.log('valor :' + this.valor)
+      if (this.valor) { // para darle el valor del id del status ya que el swich devuelve false o true
+        this.status_v = '1'
+      } else {
+        this.status_v = '9'
+      }
       if (!this.fecha) {
         this.fec = false
         this.$refs.fecha.focus()
@@ -181,17 +185,24 @@ export default ({
         this.$refs.detalle.focus()
         return true
       }
-      e.preventDefault()
-      if (this.valor) {
-        this.status_v = 1
-      } else {
-        this.status_v = 9
+      // console.log('tipo de dato front' + typeof this.status_v)
+      // console.log('tipo de dato bd' + typeof this.datos.id_status)
+      if (this.status_v === this.datos.id_status) {
+        console.log('entro : ')
+        this.mensaje = 'Error, Debe cambiar el status'
+        this.tipo = 'error filled'
+        this.titulo = 'Notificacion'
+        this.addNotification()
+        return true
       }
+      e.preventDefault()
       const body = {
         placa: this.datos.placa,
         id_status: this.status_v,
         detalle: this.detalle,
-        fecha: this.fecha
+        fecha: this.fecha,
+        fechanterior: this.datos.fstatus,
+        id_ultimo_status: this.datos.id_ultimo_s
       }
       axios.post(this.dirapi + '/actualizarst/', body).then(response => {
         console.log('response', response)
