@@ -11,7 +11,8 @@
                     v-model="placa"
                     :state="validacion"
                     class="mb-1 ml-sm-5 mb-sm-0"
-                    placeholder="INGRESE PLACA">
+                    placeholder="INGRESE PLACA"
+                    ref="placa">
                     </b-form-input>
                   </div>
                   <div class="form-group mx-sm-3 mb-1">
@@ -94,6 +95,7 @@ export default ({
   name: 'buscar',
   data: function () {
     return {
+      placa: null,
       show: false, // false
       mensaje: '',
       tipo: '',
@@ -104,9 +106,19 @@ export default ({
     }
   },
   methods: {
-    buscar () {
+    buscar (e) {
+      if (!this.placa) {
+        this.pre = false
+        this.$refs.placa.focus()
+        this.mensaje = 'Placa no puede esta vacio!'
+        this.tipo = 'error filled'
+        this.titulo = 'Buscar'
+        this.addNotification()
+        return true
+      }
+      e.preventDefault()
       const placav = this.placa
-      axios.get(this.dirapi + '/vehiculos/' + placav).then(response => {
+      axios.get(this.dirapi + '/vehiculo/' + placav).then(response => {
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false
@@ -125,7 +137,7 @@ export default ({
         this.addNotification()
         this.datos = response.data.data
         // console.log('aqui mi kilometraje obtenido' + this.datos.kilometraje)
-        if (this.datos.id_status === '1') {
+        if (this.datos.id_status === 1) {
           this.statusc = 'success'
         } else {
           this.statusc = 'danger'

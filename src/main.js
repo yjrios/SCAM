@@ -30,6 +30,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 
 import { GridPlugin } from '@syncfusion/ej2-vue-grids'
+// import { Moment } from '@moment/moment'
 
 Vue.use(GridPlugin)
 Vue.use(BootstrapVue)

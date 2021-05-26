@@ -124,6 +124,13 @@
                 </b-row>
                 <b-row>
                     <b-colxx  lg="6" md="12">
+                      <p class="azul">PROVEEDOR :<span >
+                        <b-form-select
+                            class="form-select"
+                            :options="opciones_proveedores"
+                            v-model="id_proveedor"
+                            ref="status"
+                        ></b-form-select> </span></p>
                     </b-colxx>
                     <b-colxx  lg="6" md="12">
                         <p class="azul">PRECIO USD :<span class="nada">
@@ -171,6 +178,8 @@ export default ({
       datos: {},
       opciones_pago: [],
       opciones_mtto: [],
+      opciones_proveedores: [],
+      id_proveedor: null,
       id_status_pago: null,
       id_status_mtto: null,
       fecha_sol: null,
@@ -216,6 +225,7 @@ export default ({
           console.log('paso por el else')
           this.bloqueo = false
         }
+        this.id_proveedor = this.datos.id_pro
         this.id_status_pago = this.datos.id_p
         this.id_status_mtto = this.datos.status
         this.precio = this.datos.precio
@@ -247,7 +257,8 @@ export default ({
         id_mtto: this.datos.id_mtto,
         id_servicio: this.datos.id_servicio,
         observacion: this.observacion,
-        id_status_mtto: this.id_status_mtto
+        id_status_mtto: this.id_status_mtto,
+        id_proveedor: this.id_proveedor
       }
       axios.put(this.dirapi + '/actualizarmtto', body).then(response => {
         console.log('response servicio', response)
@@ -256,6 +267,7 @@ export default ({
           this.tipoM = 'success filled'
           this.titulo = 'Guardar'
           this.addNotification()
+          this.show = false
           // this.name = '' // limpiar
           this.id_v = null
         }
@@ -299,6 +311,15 @@ export default ({
         return { text: item.status_mtto, value: item.id }
       })
       this.opciones_mtto = [...opciones]
+    }).catch(error => {
+      console.log('error', error)
+    })
+    axios.get(this.dirapi + '/proveedores').then(response => {
+      console.log('response', response)
+      const proveedores = response.data.map(item => {
+        return { text: item.proveedor, value: item.id }
+      })
+      this.opciones_proveedores = [...proveedores]
     }).catch(error => {
       console.log('error', error)
     })

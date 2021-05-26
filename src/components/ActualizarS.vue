@@ -111,6 +111,7 @@
 import axios from 'axios'
 import { mapState } from 'vuex'
 import switches from 'vue-switches'
+var moment = require('moment')
 
 export default ({
   name: 'buscar',
@@ -158,7 +159,12 @@ export default ({
         this.titulo = 'Notificacion'
         this.addNotification()
         this.datos = response.data.data
-        if (this.datos.id_status === '1') {
+        this.detalle = null
+        this.fecha = null
+        this.det = ''
+        this.fec = ''
+        // console.log('tipo de dato bd' + typeof this.datos.id_status)
+        if (this.datos.id_status === 1) {
           this.statusf = 'success'
           this.valor = true
         } else {
@@ -171,9 +177,9 @@ export default ({
     },
     guardar (e) {
       if (this.valor) { // para darle el valor del id del status ya que el swich devuelve false o true
-        this.status_v = '1'
+        this.status_v = 1
       } else {
-        this.status_v = '9'
+        this.status_v = 9
       }
       if (!this.fecha) {
         this.fec = false
@@ -188,10 +194,18 @@ export default ({
       // console.log('tipo de dato front' + typeof this.status_v)
       // console.log('tipo de dato bd' + typeof this.datos.id_status)
       if (this.status_v === this.datos.id_status) {
-        console.log('entro : ')
         this.mensaje = 'Error, Debe cambiar el status'
         this.tipo = 'error filled'
         this.titulo = 'Notificacion'
+        this.addNotification()
+        return true
+      }
+      var a = moment(this.fecha)
+      var hoy = moment()
+      if (a > hoy) {
+        this.mensaje = 'Error, la fecha no debe ser futura'
+        this.tipo = 'error filled'
+        this.titulo = 'Fecha'
         this.addNotification()
         return true
       }
@@ -207,7 +221,7 @@ export default ({
       axios.post(this.dirapi + '/actualizarst/', body).then(response => {
         console.log('response', response)
         if (response.data.message === 'Fecha menor!') {
-          this.mensaje = 'Prohibido! Fecha menor.'
+          this.mensaje = 'Prohibido! Fecha menor a la ultima registrada.'
           this.tipo = 'error filled'
           this.titulo = 'Notificacion'
           this.addNotification()

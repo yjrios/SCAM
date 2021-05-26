@@ -2,7 +2,8 @@
         <b-card :title="'Listado'">
             <div id="app">
               <ejs-grid ref="grid"
-              :dataSource="list"
+              :dataSource="lista"
+              :enableHover= "false"
               :allowPaging="true"
               :pageSettings=pageSettings
               :allowSorting="true"
@@ -10,13 +11,16 @@
               :allowPdfExport="true"
               :allowExcelExport="true"
               :toolbar="toolbarOptions"
-              :toolbarClick="gridExport">
+              :toolbarClick="gridExport"
+              :queryCellInfo='customiseCell'>
                 <e-columns>
-                  <e-column field= "posicion" headerText="Numero" textAlign="center"></e-column>
-                  <e-column field= "placa" headerText="Placa" textAlign="center"></e-column>
+                  <e-column field= "posicion" headerText="Nro" textAlign="center" width=90></e-column>
+                  <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
                   <e-column field= "modelo" headerText="Modelo" textAlign="center" ></e-column>
-                  <e-column field= "marca" headerText="Marca" textAlign="center" ></e-column>
-                  <e-column field= "status" headerText="Status" textAlign="center" ></e-column>
+                  <e-column field= "marca" headerText="Marca" textAlign="center" width=130></e-column>
+                  <e-column field= "status" headerText="Status" textAlign="center" width=130 ></e-column>
+                  <e-column field= "fecha" headerText="Fecha" textAlign="center" width=120 ></e-column>
+                  <e-column field= "dias" headerText="Dias Transcurridos" textAlign="Center" width=160 ></e-column>
                 </e-columns>
               </ejs-grid>
             </div>
@@ -26,6 +30,7 @@
 
 import { mapState } from 'vuex'
 import { Page, Sort, Filter, Toolbar, PdfExport, ExcelExport, Aggregate } from '@syncfusion/ej2-vue-grids'
+var moment = require('moment')
 
 // import store from '../store/index'
 
@@ -33,9 +38,10 @@ export default {
   name: 'lista',
   data: function () {
     return {
-      // lista: [],
-      pageSettings: { pageSize: 5 },
-      toolbarOptions: ['ExcelExport', 'PdfExport']
+      lista: [],
+      ejemplo: '',
+      pageSettings: { pageSize: 10 },
+      toolbarOptions: ['ExcelExport', 'PdfExport', 'Print']
     }
   },
   provide: {
@@ -43,15 +49,50 @@ export default {
   },
   computed: {
     ...mapState(['list'])
+    /* veamos: function () {
+      return console.log('updated lista')
+    } */
+  },
+  watch: {
+    list (val) {
+      var hoy = moment()
+      this.lista = this.list.map(item => {
+        var fecha = moment(item.fecha)
+        var color = item.status
+        return { posicion: item.posicion,
+          placa: item.placa,
+          modelo: item.modelo,
+          marca: item.marca,
+          status: item.status,
+          fecha: moment(item.fecha).format('DD-MM-YYYY'),
+          dias: hoy.diff(fecha, 'days'),
+          colorS: color
+        }
+      })
+    }
   },
   created () {
-    console.log('aqui la lista' + this.list)
+  // console.log('aqui la lista' + this.list)
   },
   updated () {
     console.log('updated lista')
   },
   mounted () {
     console.log('mounted lista')
+    var hoy = moment()
+    this.lista = this.list.map(item => {
+      var fecha = moment(item.fecha)
+      var color = item.status
+      return { posicion: item.posicion,
+        placa: item.placa,
+        modelo: item.modelo,
+        marca: item.marca,
+        status: item.status,
+        fecha: moment(item.fecha).format('DD-MM-YYYY'),
+        dias: hoy.diff(fecha, 'days'),
+        colorS: color
+      }
+    })
   },
   methods: {
     gridExport (args) {
@@ -121,7 +162,25 @@ export default {
           })
         }
       }
+    },
+    customiseCell: function (args) {
+      if (args.column.field === 'status') {
+        if (args.data['status'] === 'OPERATIVO') {
+          args.cell.classList.add('OPERATIVO')
+        } else if (args.data['status'] === 'INOPERATIVO') {
+          args.cell.classList.add('INOPERATIVO')
+        }
+      }
     }
   }
 }
 </script>
+
+<style>
+  .OPERATIVO {
+    background-color:#a3eba7;
+  }
+  .INOPERATIVO {
+    background-color:#d86e6e;
+  }
+</style>

@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     list: [],
-    dirapi: 'http://scam.agroinlaca.com:3050',
+    dirapi: 'http://localhost:3050',
     auto: 'algo'
   },
   getters: {
@@ -30,7 +30,7 @@ export const store = new Vuex.Store({
       })
     },
     buscar (state, placa) {
-      axios.get(state.dirapi + '/vehiculos/' + placa).then(response => {
+      axios.get(state.dirapi + '/vehiculo/' + placa).then(response => {
         console.log('response', response.data.data)
         if (response.status === 204) {
           state.auto = response.data.data
@@ -54,4 +54,4 @@ export const store = new Vuex.Store({
   }
 })
 
-store.commit('cargar') // iniciamos la tienda de datos consulta incial
+store.commit('cargar') // iniciamos la tienda de datos con una consulta incial

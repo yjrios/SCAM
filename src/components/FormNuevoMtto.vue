@@ -297,6 +297,7 @@ export default ({
           this.tipoM = 'success filled'
           this.titulo = 'Guardar'
           this.addNotification()
+          this.show = false
           // this.name = '' // limpiar
           this.id_v = null
           this.id_km = null

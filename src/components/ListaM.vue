@@ -41,15 +41,15 @@
               :toolbar="toolbarOptions"
               :toolbarClick="gridExport">
                 <e-columns>
-                  <e-column field= "fecha_sol" headerText="Fecha" textAlign="center"></e-column>
-                  <e-column field= "id_mtto" headerText="Nro Mtto" textAlign="center"></e-column>
-                  <e-column field= "status_mtto" headerText="Status" textAlign="center" ></e-column>
-                  <e-column field= "modelo" headerText="Modelo" textAlign="center" ></e-column>
-                  <e-column field= "placa" headerText="Placa" textAlign="center" ></e-column>
+                  <e-column field= "fecha_soli" headerText="Fecha" textAlign="center" width=110></e-column>
+                  <e-column field= "id_mtto" headerText="Nro Mtto" textAlign="center" width=115></e-column>
+                  <e-column field= "status_mtto" headerText="Status" textAlign="center" width=115></e-column>
+                  <e-column field= "modelo" headerText="Modelo" textAlign="left" ></e-column>
+                  <e-column field= "placa" headerText="Placa" textAlign="plac" width=110></e-column>
                   <e-column field= "proveedor" headerText="Proveedor" textAlign="center" ></e-column>
-                  <e-column field= "servicio" headerText="Servicio" textAlign="center" ></e-column>
-                  <e-column field= "status_pago" headerText="Pago" textAlign="center" ></e-column>
-                  <e-column field= "precio" headerText="Costo" textAlign="center" format="c2"></e-column>
+                  <e-column field= "servicio" headerText="Servicio" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
+                  <e-column field= "status_pago" headerText="Pago" textAlign="center" width=115></e-column>
+                  <e-column field= "precio" headerText="Costo" textAlign="center" format="c2" width=90></e-column>
                 </e-columns>
                 <!--<e-aggregates>
                   <e-aggregate>
@@ -100,7 +100,7 @@ export default {
         }
       }, */
       pageSettings: { pageSize: 10 },
-      toolbarOptions: ['ExcelExport', 'PdfExport']
+      toolbarOptions: ['ExcelExport', 'PdfExport', 'Print']
     }
   },
   // nuevo

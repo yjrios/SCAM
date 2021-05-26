@@ -123,7 +123,7 @@ export default ({
         this.titulo = 'Notificacion'
         this.addNotification()
         this.datos = response.data.data
-        if (this.datos.id_status === '1') {
+        if (this.datos.id_status === 1) {
           this.statusc = 'success'
         } else {
           this.statusc = 'danger'
@@ -159,11 +159,6 @@ export default ({
         this.addNotification()
         this.datos.km = this.NKilometraje
         this.datos.fecha = response.data.data
-        if (this.datos.id_status === '1') {
-          this.statusc = 'success'
-        } else {
-          this.statusc = 'danger'
-        }
       }).catch(error => {
         console.log('error', error)
       })
