@@ -1,18 +1,11 @@
 <template>
 <div>
-        <b-card class="mb-2">
+        <b-card class="mb-2" :title="'Status de la flota segun el Periodo'">
           <b-row>
              <b-colxx lg="12" md="12">
-              <b-form @submit.prevent="cargarM" id="formu" inline>
+              <b-form @submit.prevent="cargarH" id="formu" inline>
                 <div class="form-group mb-1">
-                   <b-form-group :label="'Fecha inicio'" class="mx-sm-3">
-                       <b-form-input type="date"
-                       v-model="desde"
-                       :state="des"
-                       ref="fecha"
-                       />
-                      </b-form-group>
-                      <b-form-group :label="'Fecha Final'">
+                      <b-form-group :label="'Fecha Final'" class="mx-sm-3">
                        <b-form-input type="date"
                        v-model="hasta"
                        :state="has"
@@ -21,14 +14,53 @@
                       </b-form-group>
                 </div>
                 <div class="form-group mx-sm-3 mb-1">
-                    <b-button type="submit" variant="primary" class="mt-4" @click="cargarM()" @keyup.enter="cargarM">Mostrar</b-button>
+                    <b-button type="submit" variant="primary" class="mt-4" @click="cargarH()" @keyup.enter="cargarM">Mostrar</b-button>
                 </div>
               </b-form>
              </b-colxx>
           </b-row>
         </b-card>
         <transition name='slide-fade'>
-          <b-card v-if="show">
+        <div v-if="show" >
+            <b-row class="estilo">
+                <b-colxx lg="2" md="12">
+                    <div class="icon-cards-row">
+                            <icon-card
+                                :title="'Fecha'"
+                                icon="iconsminds-calendar-4"
+                                :value="mes"
+                            />
+                            </div>
+                </b-colxx>
+                <b-colxx lg="2" md="12">
+                    <div class="icon-cards-row">
+                            <icon-card
+                                :title="'Total de Vehiculos'"
+                                icon="simple-icon-chart"
+                                :value="total"
+                            />
+                            </div>
+                </b-colxx>
+                <b-colxx lg="2" md="12">
+                    <div class="icon-cards-row">
+                            <icon-card
+                                :title="'Vehiculos Operativos'"
+                                icon="iconsminds-yes"
+                                :value="operativos"
+                            />
+                            </div>
+                </b-colxx>
+                <b-colxx lg="2" md="12">
+                    <div class="icon-cards-row">
+                            <icon-card
+                                :title="'Vehiculos Inoperativos'"
+                                icon="iconsminds-close"
+                                :value="inoperativos"
+                            />
+                    </div>
+                </b-colxx>
+            </b-row>
+          <b-card>
             <div id="app">
               <ejs-grid ref="grid"
               :dataSource="listaM"
@@ -41,15 +73,11 @@
               :toolbar="toolbarOptions"
               :toolbarClick="gridExport">
                 <e-columns>
-                  <e-column field= "fecha_soli" headerText="Fecha" textAlign="center" width=110></e-column>
-                  <e-column field= "id_mtto" headerText="Nro Mtto" textAlign="center" width=125></e-column>
-                  <e-column field= "status_mtto" headerText="Status" textAlign="center" width=115></e-column>
-                  <e-column field= "modelo" headerText="Modelo" textAlign="left" clipMode='EllipsisWithTooltip'></e-column>
-                  <e-column field= "placa" headerText="Placa" textAlign="plac" width=110></e-column>
-                  <e-column field= "proveedor" headerText="Proveedor" textAlign="center" ></e-column>
-                  <e-column field= "servicio" headerText="Servicio" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
-                  <e-column field= "status_pago" headerText="Pago" textAlign="center" width=115></e-column>
-                  <e-column field= "precio" headerText="Costo" textAlign="center" format="c2" width=90></e-column>
+                  <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
+                  <e-column field= "modelo" headerText="Modelo" textAlign="center" width=200></e-column>
+                  <e-column field= "fecha" headerText="Fecha" textAlign="center" width=130></e-column>
+                  <e-column field= "status" headerText="Status" textAlign="center" width=130></e-column>
+                  <e-column field= "detalles" headerText="Motivo" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
                 </e-columns>
                 <!--<e-aggregates>
                   <e-aggregate>
@@ -61,6 +89,8 @@
               </ejs-grid>
             </div>
           </b-card>
+
+        </div>
         </transition>
 </div>
 </template>
@@ -71,7 +101,8 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 // import Vue from 'vue'
 import { Page, Sort, Filter, Toolbar, PdfExport, ExcelExport, Aggregate } from '@syncfusion/ej2-vue-grids'
-
+import IconCard from '@/components/Cards/IconCard'
+var moment = require('moment')
 // nuevo
 // import Vue from 'vue'
 // import('@syncfusion/ej2-vue-grids').PdfExportProperties
@@ -81,49 +112,53 @@ export default {
   data: function () {
     return {
       listaM: [],
-      desde: null,
+      operativos: null,
       hasta: null,
+      mes: null,
+      inoperativos: null,
+      total: null,
       show: false,
       des: '',
       has: '',
+      pla: '',
       data: this.listaM,
-      /* footerSum: function () {
-        return {
-          template: Vue.component('Sum', {
-            template: `<span>Suma: {{listaM.Sum}}</span>`,
-            data () {
-              return {
-                data: {}
-              }
-            }
-          })
-        }
-      }, */
       pageSettings: { pageSize: 10 },
-      toolbarOptions: ['ExcelExport', 'PdfExport', 'Print']
+      toolbarOptions: ['ExcelExport', 'PdfExport']
     }
+  },
+  components: {
+    IconCard
   },
   // nuevo
   provide: {
     grid: [Page, Sort, Filter, Toolbar, PdfExport, ExcelExport, Aggregate]
   },
   methods: {
-    cargarM (e) {
-      if (!this.desde) {
-        this.des = false
-        return true
-      }
+    cargarH (e) {
       if (!this.hasta) {
         this.has = false
         return true
       }
       e.preventDefault()
-      const desde = this.desde
       const hasta = this.hasta
-      axios.get(this.dirapi + '/getServices?desde=' + desde + '&hasta=' + hasta).then(response => {
-        console.log('response datos', response.data.data)
+      axios.get(this.dirapi + '/getStatusPeriodo?hasta=' + hasta).then(response => {
         this.listaM = response.data.data
         this.show = true
+        this.operativos = 0
+        this.inoperativos = 0
+        this.total = 0
+        this.listaM.map(item => {
+          if (item.id === 1) {
+            this.operativos += 1
+          } else if (item.id === 9) {
+            this.inoperativos += 1
+          }
+        })
+        this.total = this.inoperativos + this.operativos
+        moment.locale('es')
+        var a = moment(this.hasta)
+        console.log('mes = ' + a)
+        this.mes = a.format('MMMM')
       }).catch(error => {
         console.log('error', error)
       })
@@ -177,7 +212,7 @@ export default {
               rows: [{
                 cells: [{
                   colSpan: 4,
-                  value: 'lISTADO DE SERVICIOS REALIZADOS',
+                  value: 'LISTADO DE OPERATIVIDAD DEL VEHICULO',
                   style: { fontSize: 20, hAlign: 'Center', bold: true }
                 }]
               }]
@@ -218,5 +253,14 @@ export default {
 
 .e-grid .e-gridpager .e-currentitem{
   background-color:rgb(0, 0, 182);
+}
+
+.estilo {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
 }
 </style>

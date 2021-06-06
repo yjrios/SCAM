@@ -49,12 +49,12 @@
               :toolbar="toolbarOptions"
               :toolbarClick="gridExport">
                 <e-columns>
-                  <e-column field= "placa" headerText="Placa" textAlign="center"></e-column>
+                  <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
                   <e-column field= "modelo" headerText="Modelo" textAlign="center"></e-column>
-                  <e-column field= "fecha" headerText="Fecha" textAlign="center" ></e-column>
-                  <e-column field= "status" headerText="Status" textAlign="center" ></e-column>
-                   <e-column field= "dias" headerText="Dias" textAlign="center" ></e-column>
-                  <e-column field= "detalles" headerText="Motivo" textAlign="center" ></e-column>
+                  <e-column field= "fecha" headerText="Fecha" textAlign="center" width=130></e-column>
+                  <e-column field= "status" headerText="Status" textAlign="center" width=130></e-column>
+                   <e-column field= "dias" headerText="Dias" textAlign="center" width=90></e-column>
+                  <e-column field= "detalles" headerText="Motivo" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
                 </e-columns>
                 <!--<e-aggregates>
                   <e-aggregate>

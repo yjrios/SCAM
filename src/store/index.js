@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     list: [],
-    dirapi: 'http://localhost:3050',
+    dirapi: 'http://scam.agroinlaca.com:3050',
     auto: 'algo'
   },
   getters: {

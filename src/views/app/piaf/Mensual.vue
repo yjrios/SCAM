@@ -2,14 +2,14 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
-          <h2 class="mb-1 text-black">General <span class="h6"> Inicio | Control & Admin | <span class="card-text text-muted text-small mb-0 font-weight-light">General</span> </span></h2>
+          <h2 class="mb-4 text-black">Status de Vehiculos <span class="h6"> Inicio | Control & Admin | <span class="card-text text-muted text-small mb-0 font-weight-light">Historico de Vehiculo</span> </span></h2>
         <div class="separator mb-5"></div>
       </b-colxx>
     </b-row>
     <b-row>
       <b-colxx xxs="12">
         <!---<b-card :title="'Registro de nuevo Kilometraje'">-->
-          <General/>
+          <StatusMe/>
        <!--- </b-card>-->
       </b-colxx>
     </b-row>
@@ -18,13 +18,13 @@
 
 <script>
 // @ is an alias to /src
-import General from '@/components/General.vue'
+import StatusMe from '@/components/StatusMe.vue'
 /* import axios from 'axios' */
 
 export default {
   name: 'card',
   components: {
-    General
+    StatusMe
   }
 }
 </script>

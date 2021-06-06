@@ -61,7 +61,8 @@
                 <p class="azul">ORDEN DE MTTO NRO : <span class="nada">{{datos.id_mtto}}</span></p>
                 <p class="azul">DOCUMENTO SAP ASOCIADO : <span class="nada"> {{datos.doc_sap}}</span></p>
                 <p class="azul">TIPO DE MANTENIMIENTO : <span class="nada"> {{datos.categoria}} </span></p>
-                <p class="azul">FECHA DEL SERVICIO :<span class="nada"> {{datos.fecha}} </span></p>
+                <p class="azul">FECHA DEL SOLICITUD :<span class="nada"> {{datos.fecha_sol_f}} </span></p>
+                <p class="azul">FECHA DEL SERVICIO :<span class="nada"> {{datos.fecha_f}} </span></p>
                 <p class="azul">SERVICIO : <span class="nada"> {{datos.servicio}} </span></p>
               </b-colxx>
               <b-colxx  lg="6" md="12">

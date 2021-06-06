@@ -17,8 +17,10 @@ const routes = [
         redirect: '/app/piaf/start',
         children: [
           { path: 'start', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Start') },
+          { path: 'actualizarkm', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/ActualizarKm') },
           { path: 'status', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Status') },
-          { path: 'historial', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Historico') }
+          { path: 'historial', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Historico') },
+          { path: 'statusmensual', component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Mensual') }
         ]
       },
       {
