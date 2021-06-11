@@ -16,9 +16,10 @@
                 <e-columns>
                   <e-column field= "posicion" headerText="Nro" textAlign="center" width=90></e-column>
                   <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
-                  <e-column field= "modelo" headerText="Modelo" textAlign="center" ></e-column>
+                  <e-column field= "modelo" headerText="Modelo" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
                   <e-column field= "marca" headerText="Marca" textAlign="center" width=130></e-column>
                   <e-column field= "status" headerText="Status" textAlign="center" width=130 ></e-column>
+                  <e-column field= "detalles" headerText="Detalle" textAlign="Center" width=160 clipMode='EllipsisWithTooltip'></e-column>
                   <e-column field= "fecha" headerText="Fecha" textAlign="center" width=120 ></e-column>
                   <e-column field= "dias" headerText="Dias Transcurridos" textAlign="Center" width=160 ></e-column>
                 </e-columns>
@@ -90,6 +91,7 @@ export default {
         status: item.status,
         fecha: moment(item.fecha).format('DD-MM-YYYY'),
         dias: hoy.diff(fecha, 'days'),
+        detalles: item.detalles,
         colorS: color
       }
     })

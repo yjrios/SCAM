@@ -33,29 +33,67 @@
                             </div>
                 </b-colxx>
                 <b-colxx lg="2" md="12">
-                    <div class="icon-cards-row">
+                    <div class="icon-cards-row" v-b-toggle.totalv>
                             <icon-card
                                 :title="'Total de Vehiculos'"
                                 icon="simple-icon-chart"
                                 :value="total"
+                                :nombre="'totalv'"
+                                :ligera="ligera"
+                                :mediana="mediana"
+                                :pesada="pesada"
                             />
                             </div>
                 </b-colxx>
                 <b-colxx lg="2" md="12">
-                    <div class="icon-cards-row">
+                    <div class="icon-cards-row" v-b-toggle.opera>
                             <icon-card
                                 :title="'Vehiculos Operativos'"
-                                icon="iconsminds-yes"
+                                icon="simple-icon-check"
                                 :value="operativos"
+                                :nombre="'opera'"
+                                :ligera="opeli"
+                                :mediana="opeme"
+                                :pesada="opepe"
                             />
                             </div>
                 </b-colxx>
                 <b-colxx lg="2" md="12">
-                    <div class="icon-cards-row">
+                    <div class="icon-cards-row" v-b-toggle.operaporce>
+                            <icon-card
+                                :title="'Porcentaje Operativos'"
+                                icon="simple-icon-like"
+                                :value="porop+' %'"
+                                :nombre="'operaporce'"
+                                :ligera="opelipor + '%'"
+                                :mediana="opemepor + '%'"
+                                :pesada="opepepor + '%'"
+                            />
+                    </div>
+                </b-colxx>
+                <b-colxx lg="2" md="12">
+                    <div class="icon-cards-row" v-b-toggle.equis>
                             <icon-card
                                 :title="'Vehiculos Inoperativos'"
-                                icon="iconsminds-close"
+                                icon="simple-icon-close"
                                 :value="inoperativos"
+                                :nombre="'equis'"
+                                :ligera="inoli"
+                                :mediana="inome"
+                                :pesada="inope"
+                            />
+                    </div>
+                </b-colxx>
+                <b-colxx lg="2" md="12">
+                    <div class="icon-cards-row" v-b-toggle.inoperaporce>
+                            <icon-card
+                                :title="'Vehiculos Inoperativos'"
+                                icon="simple-icon-dislike"
+                                :value="porin+' %' "
+                                :nombre="'inoperaporce'"
+                                :ligera="inolipor + '%'"
+                                :mediana="inomepor + '%'"
+                                :pesada="inopepor + '%'"
                             />
                     </div>
                 </b-colxx>
@@ -75,7 +113,7 @@
                 <e-columns>
                   <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
                   <e-column field= "modelo" headerText="Modelo" textAlign="center" width=200></e-column>
-                  <e-column field= "fecha" headerText="Fecha" textAlign="center" width=130></e-column>
+                  <e-column field= "fecha1" headerText="Fecha" textAlign="center" width=130></e-column>
                   <e-column field= "status" headerText="Status" textAlign="center" width=130></e-column>
                   <e-column field= "detalles" headerText="Motivo" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
                 </e-columns>
@@ -101,7 +139,7 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 // import Vue from 'vue'
 import { Page, Sort, Filter, Toolbar, PdfExport, ExcelExport, Aggregate } from '@syncfusion/ej2-vue-grids'
-import IconCard from '@/components/Cards/IconCard'
+import IconCard from '@/components/Cards/IconCard2'
 var moment = require('moment')
 // nuevo
 // import Vue from 'vue'
@@ -117,11 +155,28 @@ export default {
       mes: null,
       inoperativos: null,
       total: null,
+      porin: null,
+      porop: null,
       show: false,
       des: '',
       has: '',
       pla: '',
       data: this.listaM,
+      inoli: null,
+      inome: null,
+      inope: null,
+      opeli: null,
+      opeme: null,
+      opepe: null,
+      ligera: null,
+      mediana: null,
+      pesada: null,
+      inolipor: null,
+      inomepor: null,
+      inopepor: null,
+      opelipor: null,
+      opemepor: null,
+      opepepor: null,
       pageSettings: { pageSize: 10 },
       toolbarOptions: ['ExcelExport', 'PdfExport']
     }
@@ -147,17 +202,48 @@ export default {
         this.operativos = 0
         this.inoperativos = 0
         this.total = 0
+        this.opeli = 0
+        this.opeme = 0
+        this.opepe = 0
+        this.inoli = 0
+        this.inome = 0
+        this.inope = 0
         this.listaM.map(item => {
           if (item.id === 1) {
             this.operativos += 1
           } else if (item.id === 9) {
             this.inoperativos += 1
           }
+          console.log('id : ' + item.id_tipo_carga)
+          if (item.id_tipo_carga === 1 && item.id === 1) {
+            this.opeli += 1
+          } else if (item.id_tipo_carga === 2 && item.id === 1) {
+            this.opeme += 1
+          } else if (item.id_tipo_carga === 3 && item.id === 1) {
+            this.opepe += 1
+          }
+          if (item.id_tipo_carga === 1 && item.id === 9) {
+            this.inoli += 1
+          } else if (item.id_tipo_carga === 2 && item.id === 9) {
+            this.inome += 1
+          } else if (item.id_tipo_carga === 3 && item.id === 9) {
+            this.inope += 1
+          }
         })
         this.total = this.inoperativos + this.operativos
+        this.porin = ((this.inoperativos * 100) / this.total).toFixed(0)
+        this.porop = ((this.operativos * 100) / this.total).toFixed(0)
+        this.opelipor = ((this.opeli * 100) / this.total).toFixed(0)
+        this.opemepor = ((this.opeme * 100) / this.total).toFixed(0)
+        this.opepepor = ((this.opepe * 100) / this.total).toFixed(0)
+        this.inolipor = ((this.inoli * 100) / this.total).toFixed(0)
+        this.inomepor = ((this.inome * 100) / this.total).toFixed(0)
+        this.inopepor = ((this.inope * 100) / this.total).toFixed(0)
+        this.ligera = this.opeli + this.inoli
+        this.mediana = this.opeme + this.inome
+        this.pesada = this.opepe + this.inope
         moment.locale('es')
         var a = moment(this.hasta)
-        console.log('mes = ' + a)
         this.mes = a.format('MMMM')
       }).catch(error => {
         console.log('error', error)
@@ -263,4 +349,5 @@ export default {
     padding-left: 10px;
     padding-top: 10px;
 }
+
 </style>
