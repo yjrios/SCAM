@@ -11,7 +11,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     list: [],
-    dirapi: 'http://scam.agroinlaca.com:3050',
+    dirapi: 'http://localhost:3050',
+    dirphoto: 'http://localhost/uploads',
     auto: 'algo'
   },
   getters: {

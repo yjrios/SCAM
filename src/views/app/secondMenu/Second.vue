@@ -2,7 +2,7 @@
 <div>
   <b-row>
     <b-colxx xxs="12">
-      <piaf-breadcrumb :heading="$t('menu.second')"/>
+      <piaf-breadcrumb :heading="$t('menu.second')" />
       <!--<div class="separator mb-5"></div>--><br><br>
     </b-colxx>
   </b-row>

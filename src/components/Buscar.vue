@@ -29,7 +29,7 @@
         <b-colxx lg="4" md="12">
                 <b-card class="mb-4" no-body>
                    <div class="position-relative">
-                        <img src="/assets/img/silueta.jpg" class="card-img-top"/>
+                        <img :src="dirphoto+'/'+datos.dir_foto" class="card-img-top"/>
                         <b-badge variant="primary" pill class="position-absolute badge-top-left">CARGA {{datos.carga}}</b-badge>
                         <b-badge :variant='statusc' pill class="position-absolute badge-top-left-2">{{datos.status}}</b-badge>
                     </div>
@@ -155,7 +155,7 @@ export default ({
     }
   },
   computed: {
-    ...mapState(['dirapi'])
+    ...mapState(['dirapi', 'dirphoto'])
   }
 })
 </script>

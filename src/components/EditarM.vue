@@ -36,7 +36,7 @@
         <b-colxx lg="4" md="12">
                 <b-card class="mb-4" no-body>
                    <div class="position-relative">
-                        <img src="/assets/img/mtto.jpg" class="card-img-top"/>
+                        <img :src="dirphoto+'/'+datos.dir_foto" class="card-img-top"/>
                         <b-badge variant="primary" pill class="position-absolute badge-top-left">TIPO DE SERVICIO </b-badge>
                         <b-badge :variant='statusc' pill class="position-absolute badge-top-left-2">{{datos.categoria}}</b-badge>
                     </div>
@@ -294,7 +294,7 @@ export default ({
     }
   },
   computed: {
-    ...mapState(['dirapi'])
+    ...mapState(['dirapi', 'dirphoto'])
   },
   mounted () {
     axios.get(this.dirapi + '/statuspago').then(response => {
