@@ -11,9 +11,12 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     list: [],
-    dirapi: 'http://localhost:3050',
-    dirphoto: 'http://localhost/uploads',
-    auto: 'algo'
+    dirapi: process.env.VUE_APP_BASE_URL,
+    dirphoto: 'http://scamimg.agroinlaca.com',
+    auto: 'algo',
+    dropdown : [],
+    viaje: [],
+    status: [],
   },
   getters: {
   },
@@ -24,7 +27,6 @@ export const store = new Vuex.Store({
     },
     cargar (state) {
       axios.get(state.dirapi + '/vehiculos').then(response => {
-        console.log('response primero store', response)
         state.list = response.data
       }).catch(error => {
         console.log('error', error)
@@ -42,12 +44,55 @@ export const store = new Vuex.Store({
       }).catch(error => {
         console.log('error', error)
       })
-    }
+    },
+    llenarDropdown (state) {
+      try {
+        axios.get(state.dirapi + '/amc/dropdownviajes')
+        .then(resp => {
+          if(resp.data) {
+          state.dropdown = resp.data
+          }
+        })
+      } catch (error) {
+         console.log(error)
+      }
+    },
+    cargarViajeAmc (state) {
+      try {
+        axios.get(state.dirapi + '/amc/viajes')
+        .then(resp => {
+          if(resp.data) {
+            state.viaje = resp.data
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    ObtenerStatus (state) {
+      try {
+        axios.get(state.dirapi+'/amc/allstatus')
+          .then(resp => {
+            state.status = resp.data
+          })
+          .catch(err =>{
+            console.log(err)
+          })
+      } catch (error) {
+        console.log('ERROR '+error)
+      }
+    },
   },
   actions: {
     setLang ({ commit }, payload) {
       commit('changeLang', payload)
-    }
+    },
+    getInfoViajes ({ commit }) {
+      commit('llenarDropdown')
+    },
+    getInfoStatus({ commit }){
+      commit('ObtenerStatus')
+    },
   },
   modules: {
     menu,

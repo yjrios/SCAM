@@ -1,7 +1,7 @@
 <template>
   <div class="h-100">
     <router-view/>
-    <color-switcher/>
+    <ColorSwitcher/>
   </div>
 </template>
 <script>
@@ -25,8 +25,8 @@ export default {
       document.body.classList.remove('rtl')
     }
   },
-  created: {
-    cargar () {}
+  created () {
+    this.cargar()
   },
   methods: {
     ...mapMutations(['cargar'])

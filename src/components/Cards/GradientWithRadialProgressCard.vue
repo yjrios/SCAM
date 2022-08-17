@@ -12,8 +12,8 @@
             <radial-progress-bar
             :diameter="diameter"
             :strokeWidth="strokeWidth"
-            :completed-steps="percent"
-            :total-steps=100
+            :completedSteps="percent"
+            :total-steps="100"
             >{{progressText}}</radial-progress-bar>
         </div>
     </b-card-body>

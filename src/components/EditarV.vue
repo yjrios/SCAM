@@ -474,7 +474,7 @@ export default ({
           this.tipoM = 'success filled'
           this.titulo = 'Guardar'
           this.addNotification()
-          // this.show = false --------------------------------------------------------------------
+          this.show = false
         // localStorage.getItem('idUser')
         }
         if (response.data.message === 'Placa existe!') {

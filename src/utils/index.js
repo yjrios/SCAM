@@ -148,6 +148,7 @@ export const getDirection = () => {
       direction = localValue
     }
   }
+  console.log(direction)
   return {
     direction,
     isRtl: direction === 'rtl'

@@ -9,7 +9,7 @@
                     </b-form-group>
                   </b-colxx>
                    <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Clsificacion del vehiculo'">
+                    <b-form-group :label="'Clasificacion del vehiculo'">
                       <b-form-select
                         class="form-select"
                         :options="tipos"
@@ -42,12 +42,12 @@
                   </b-colxx>
                   <b-colxx lg="3" md="12">
                     <b-form-group :label="'Modelo'">
-                    <b-form-input type="Text" v-model="modelo" :state="mod" :placeholder="'CHEYENNE 4X2'"/>
+                    <b-form-input type="text" v-model="modelo" :state="mod" :placeholder="'CHEYENNE 4X2'"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="2" md="12">
                     <b-form-group :label="'Ano'">
-                    <b-form-input type="Text" v-model="ano" :state="an" :placeholder="'1992'"/>
+                    <b-form-input type="text" v-model="ano" :state="an" :placeholder="'1992'"/>
                     </b-form-group>
                   </b-colxx>
                  </b-row>
@@ -59,17 +59,17 @@
                   </b-colxx>
                    <b-colxx lg="2" md="12">
                     <b-form-group :label="'Color'">
-                    <b-form-input type="Text" v-model="color" :state="col" :placeholder="'BLANCO'"/>
+                    <b-form-input type="text" v-model="color" :state="col" :placeholder="'BLANCO'"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="4" md="12">
                     <b-form-group :label="'Motor'">
-                    <b-form-input type="Text" v-model="motor" :state="mot" :placeholder="'VORTEC 5.3L 325'"/>
+                    <b-form-input type="text" v-model="motor" :state="mot" :placeholder="'VORTEC 5.3L 325'"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="1" md="12">
                     <b-form-group :label="'Ejes'">
-                    <b-form-input type="Text" v-model="ejes" :state="eje" :placeholder="'2'"/>
+                    <b-form-input type="text" v-model="ejes" :state="eje" :placeholder="'2'"/>
                     </b-form-group>
                   </b-colxx>
                  </b-row>
@@ -81,19 +81,19 @@
                   </b-colxx>
                    <b-colxx lg="4" md="12">
                     <b-form-group :label="'Cauchos'">
-                    <b-form-input type="Text" v-model="cauchos" :state="cau" :placeholder="'265/70R17 CARRETERA'"/>
+                    <b-form-input type="text" v-model="cauchos" :state="cau" :placeholder="'265/70R17 CARRETERA'"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="2" md="12">
                     <b-form-group :label="'Sistema Electrico'">
-                    <b-form-input type="Text" v-model="sistema_electrico" :state="sis" :placeholder="'12V'"/>
+                    <b-form-input type="text" v-model="sistema_electrico" :state="sis" :placeholder="'12V'"/>
                     </b-form-group>
                   </b-colxx>
                  </b-row>
                  <b-row>
                   <b-colxx lg="2" md="12">
                     <b-form-group :label="'Bateria'">
-                    <b-form-input type="Text" v-model="bateria" :state="bat" :placeholder="'GRUPO 24'"/>
+                    <b-form-input type="text" v-model="bateria" :state="bat" :placeholder="'GRUPO 24'"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="5" md="12" >
@@ -103,14 +103,14 @@
                   </b-colxx>
                    <b-colxx lg="5" md="12">
                     <b-form-group :label="'Suspension Trasera'">
-                    <b-form-input type="Text" v-model="suspension_tra" :state="susT" :placeholder="'BALLESTAS Y AMORTIGUADORES'"/>
+                    <b-form-input type="text" v-model="suspension_tra" :state="susT" :placeholder="'BALLESTAS Y AMORTIGUADORES'"/>
                     </b-form-group>
                   </b-colxx>
                  </b-row>
                  <b-row>
                   <b-colxx lg="2" md="12">
                     <b-form-group :label="'Presion de Cauchos'">
-                    <b-form-input type="Text" v-model="presion_cauchos" :state="pre" :placeholder="'35 PSI'"/>
+                    <b-form-input type="text" v-model="presion_cauchos" :state="pre" :placeholder="'35 PSI'"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx lg="4" md="12" >
@@ -120,7 +120,7 @@
                   </b-colxx>
                   <b-colxx lg="6" md="12">
                     <b-form-group :label="'Aceite de Caja'">
-                    <b-form-input type="Text" v-model="aceite_caja" :state="aceC"  :placeholder="'ACEITE PARA TRANSMISIONES AUTOMATICAS DEXR 3'"/>
+                    <b-form-input type="text" v-model="aceite_caja" :state="aceC"  :placeholder="'ACEITE PARA TRANSMISIONES AUTOMATICAS DEXR 3'"/>
                     </b-form-group>
                   </b-colxx>
                  </b-row>

@@ -41,6 +41,14 @@
                 </a>
               </router-link>
           </li>
+          <li :class="{ active : selectedParentMenu==='amc'}">
+             <router-link @click.native="changeSelectedParentHasNoSubmenu('amc')" :class="{ active : selectedParentMenu==='amc' }" to="/app/amc">
+                <a>
+                  <i class="iconsminds-check"></i>
+                  <span>{{ $t("menu.amc") }}</span>
+                </a>
+              </router-link>
+          </li>
         </ul>
       </vue-perfect-scrollbar>
     </div>

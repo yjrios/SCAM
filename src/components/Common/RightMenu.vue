@@ -12,7 +12,7 @@
       </ul>
       <slot name="below"></slot>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>

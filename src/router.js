@@ -43,6 +43,18 @@ const routes = [
         ]
       },
       {
+        path: '/app/amc',
+        component: () => import(/* webpackChunkName: "amc" */ './views/app/amc/AgendaView'),
+        redirect: '/amc/all',
+        children: [
+          { path: '/amc/all', name: 'mostrarlistado', component: () => import(/* webpackChunkName: "pages" */ './components/Amc/DisplayAmc') },
+          { path: 'registrar', component: () => import(/* webpackChunkName: "pages" */ './components/Amc/AgendaMaestraCarga') },
+          { path: 'editar', component: () => import(/* webpackChunkName: "pages" */ './components/Amc/ModificarAmc') },
+          { path: 'anular', component: () => import(/* webpackChunkName: "pages" */ './components/Amc/AnularAmc') },
+          { path: 'centros', component: () => import(/* webpackChunkName: "pages" */ './components/Amc/SedesAmc') }
+        ]
+      },
+      {
         path: 'app/single',
         component: () => import(/* webpackChunkName: "single" */ './views/app/single')
       }

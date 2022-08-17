@@ -1,45 +1,43 @@
 <template>
 <div>
-
-        <b-row>
-          <b-colxx lg="4" md="12" class="mb-4">
-            <div class="position-relative">
-                <img src="/assets/img/cargaligera.jpg" class="card-img-top"/>
-            </div>
-            <gradient-with-radial-progress-card
-              icon="simple-icon-basket"
-              :title="cargaligera+' Carga Ligera'"
-              :detail="'Camionetas y Camiones pequeños'"
-              :percent="porcl"
-              :progressText="porcl+ '%'"
-            />
-          </b-colxx>
-          <b-colxx lg="4" md="12" class="mb-4">
-            <div class="position-relative">
-                <img src="/assets/img/cargamediana.jpg" class="card-img-top"/>
-            </div>
-            <gradient-with-radial-progress-card
-              icon="simple-icon-basket-loaded"
-              :title="cargamediana+' Carga Median'"
-              :detail="'Camiones con capacidad maxima 10 Toneladas'"
-              :percent="porcm"
-              :progressText="porcm+ '%'"
-            />
-          </b-colxx>
-          <b-colxx lg="4" md="12" class="mb-4">
-            <div class="position-relative">
-                <img src="/assets/img/cargapesada.jpg" class="card-img-top"/>
-            </div>
-            <gradient-with-radial-progress-card
-              icon="iconsminds-mine"
-              :title="cargapesada+' Carga Pesada'"
-              :detail="'Camiones con capacidad 30 Toneladas o mas'"
-              :percent="porcp"
-              :progressText="porcp+ '%'"
-            />
-          </b-colxx>
-        </b-row>
-
+  <b-row>
+    <b-colxx lg="4" md="12" class="mb-4">
+      <div class="position-relative">
+          <img src="/assets/img/cargaligera.jpg" class="card-img-top"/>
+      </div>
+      <gradient-with-radial-progress-card
+        icon="simple-icon-basket"
+        :title="cargaligera+' Carga Ligera'"
+        :detail="'Camionetas y Camiones pequeños'"
+        :percent="Number(porcl)"
+        :progressText="porcl + '%'"
+      />
+    </b-colxx>
+    <b-colxx lg="4" md="12" class="mb-4">
+      <div class="position-relative">
+          <img src="/assets/img/cargamediana.jpg" class="card-img-top"/>
+      </div>
+      <gradient-with-radial-progress-card
+        icon="simple-icon-basket-loaded"
+        :title="cargamediana+' Carga Median'"
+        :detail="'Camiones con capacidad maxima 10 Toneladas'"
+        :percent="Number(porcm)"
+        :progressText="porcm + '%'"
+        />
+    </b-colxx>
+    <b-colxx lg="4" md="12" class="mb-4">
+      <div class="position-relative">
+          <img src="/assets/img/cargapesada.jpg" class="card-img-top"/>
+      </div>
+      <gradient-with-radial-progress-card
+        icon="iconsminds-mine"
+        :title="cargapesada+' Carga Pesada'"
+        :detail="'Camiones con capacidad 30 Toneladas o mas'"
+        :percent="Number(porcp)"
+        :progressText="porcp + '%'"
+      />
+    </b-colxx>
+  </b-row>
 </div>
 </template>
 
@@ -75,7 +73,6 @@ export default {
   },
   mounted () {
     axios.get(this.dirapi + '/vehiculos').then(response => {
-      console.log('response', response)
       this.cargaligera = 0
       this.cargamediana = 0
       this.cargapesada = 0

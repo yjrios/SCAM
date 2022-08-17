@@ -9,6 +9,11 @@ module.exports = {
       filename: 'index.html'
     }
   },
+  css: {
+    extract: {
+      ignoreOrder: true
+    },
+  },
   devServer: {
     clientLogLevel: 'warning',
     hot: true,
