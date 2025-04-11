@@ -53,7 +53,9 @@
                     <b-card-body>
                         <h6 class="mb-4 card-subtitle">{{datos.marca}} - {{datos.modelo}}</h6>
                         <h6>KILOMETROS : {{datos.km}} KM</h6><br>
-                        <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
+                        <!-- YEISON -->
+                        <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados de {{ datos.empresa }}</p>
+                        <!-- YEISON -->
                     </b-card-body>
                 </b-card>
         </b-colxx>
@@ -85,7 +87,7 @@
 
 <script>
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapState } from 'vuex' 
 
 export default ({
   name: 'buscar',
@@ -99,7 +101,8 @@ export default ({
       statusc: '',
       datos: {},
       kil: '',
-      NKilometraje: null
+      NKilometraje: null,
+      placa: null
     }
   },
   methods: {

@@ -31,6 +31,7 @@
                 <p class="verde h6">KILOMETRAJE ACTUAL :<span class="verde"> {{datos.km}} KM </span> </p>
                 <p class="azul h6">PlACA :<span class="nada"> {{datos.placa}} </span>  </p>
                 <p class="azul h6">COLOR :<span class="nada"> {{datos.color}} </span>  </p>
+                <p class="azul h6">SEDE :<span class="nada"> {{datos.empresa}} </span>  </p>
                 </b-colxx>
             </b-row>
         </b-card>
@@ -188,10 +189,14 @@ export default ({
       proveedores: [],
       opciones_pago: []
     }
-  },
+  }, 
   methods: {
     buscar () {
-      axios.get(this.dirapi + '/kilometraje/' + this.placa).then(response => {
+      /* YEISON */
+      const placav = this.placa
+      /* YEISON */
+
+      axios.get(this.dirapi + '/kilometraje/' + placav).then(response => {
         console.log('response', response)
         if (response.status === 204) {
           this.show = false // false

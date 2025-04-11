@@ -2,25 +2,24 @@
 <div>
     <b-row class="">
 
-        <b-colxx  lg="4" md="12" >
-            <b-card class="mb-3">
-
-                <b-form @submit.stop.prevent inline class="row justify-content-center">
-                  <div class="form-group mb-1">
-                    <b-form-input
-                    v-model="placa"
-                    :state="validacion"
-                    class="mb-1 ml-sm-5 mb-sm-0"
-                    placeholder="INGRESE PLACA"
-                    ref="placa">
-                    </b-form-input>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-1">
-                    <b-button type="submit" variant="primary" @click="buscar" @keyup.enter="buscar">Buscar</b-button>
-                  </div>
-                </b-form>
-            </b-card>
-        </b-colxx>
+      <b-colxx  lg="4" md="12" >
+          <b-card class="mb-3">
+              <b-form @submit.stop.prevent inline class="row justify-content-center">
+                <div class="form-group mb-1">
+                  <b-form-input
+                  v-model="placa"
+                  :state="validacion"
+                  class="mb-1 ml-sm-5 mb-sm-0"
+                  placeholder="INGRESE PLACA"
+                  ref="placa">
+                  </b-form-input>
+                </div>
+                <div class="form-group mx-sm-3 mb-1">
+                  <b-button type="submit" variant="primary" @click="buscar" @keyup.enter="buscar">Buscar</b-button>
+                </div>
+              </b-form>
+          </b-card>
+      </b-colxx>
 
     </b-row>
 <transition name="slide-fade">
@@ -28,135 +27,155 @@
         <b-colxx lg="9" md="12">
             <b-card class="mb-4" :title="'Datos Tecnicos del Vehiculo'">
                 <b-form @submit.prevent="guardar" id="formu">
-                 <b-row>
-                  <b-colxx lg="3" md="12" >
-                    <b-form-group :label="'Piloto o Responsable'" :description="'Nombre del chofer'">
-                    <b-form-input type="text" :state="resp" v-model="responsable" :placeholder="'Pablo Puerta'" />
-                    </b-form-group>
-                  </b-colxx>
-                   <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Clsificacion del vehiculo'">
-                      <b-form-select
-                        class="form-select"
-                        :options="tipos"
-                        v-model="id_tipo_carga"
-                        :state="cla"
-                      ></b-form-select>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="5" md="12" >
-                    <b-form-group :label="'Tipo de Transporte '">
-                    <b-form-input type="text" v-model="tipo_transporte" :state="tipT" :placeholder="'PERSONAL'" />
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="2" md="12" >
-                    <b-form-group :label="'Placa'">
-                    <b-form-input type="text" v-model="placa" :state="pla" :placeholder="'ABCDEF'" :disabled="true"/>
-                    </b-form-group>
-                  </b-colxx>
-                   <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Marca'">
-                      <b-form-select
-                        class="form-select"
-                        :options="marcas"
-                        v-model="id_marca"
-                        :state="mar"
-                      ></b-form-select>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Modelo'">
-                    <b-form-input type="Text" v-model="modelo" :state="mod" :placeholder="'CHEYENNE 4X2'"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="2" md="12">
-                    <b-form-group :label="'Ano'">
-                    <b-form-input type="Text" v-model="ano" :state="an" :placeholder="'1992'"/>
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="3" md="12" >
-                    <b-form-group :label="'Tipo'" >
-                    <b-form-input type="text" v-model="tipov" :state="tip" :placeholder="'PICK UP'" />
-                    </b-form-group>
-                  </b-colxx>
-                   <b-colxx lg="2" md="12">
-                    <b-form-group :label="'Color'">
-                    <b-form-input type="Text" v-model="color" :state="col" :placeholder="'BLANCO'"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="6" md="12">
-                    <b-form-group :label="'Motor'">
-                    <b-form-input type="Text" v-model="motor" :state="mot" :placeholder="'VORTEC 5.3L 325'"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="1" md="12">
-                    <b-form-group :label="'Ejes'">
-                    <b-form-input type="Text" v-model="ejes" :state="eje" :placeholder="'2'"/>
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="3" md="12" >
-                    <b-form-group :label="'Transmision'" >
-                    <b-form-input type="text" v-model="transmision" :state="tra" :placeholder="'AUTOMATICA 4L60E'" />
-                    </b-form-group>
-                  </b-colxx>
-                   <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Cauchos'">
-                    <b-form-input type="Text" v-model="cauchos" :state="cau" :placeholder="'265/70R17 CARRETERA'"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="2" md="12">
-                    <b-form-group :label="'Sistema Electrico'">
-                    <b-form-input type="Text" v-model="sistema_electrico" :state="sis" :placeholder="'12V'"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="2" md="12">
-                    <b-form-group :label="'Bateria'">
-                    <b-form-input type="Text" v-model="bateria" :state="bat" :placeholder="'GRUPO 24'"/>
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="5" md="12" >
-                    <b-form-group :label="'Suspension Delantera'" >
-                    <b-form-input type="text" v-model="suspension_del" :state="susD" :placeholder="'INDEPENDIENTE ESPIRAL Y MESETA'" />
-                    </b-form-group>
-                  </b-colxx>
-                   <b-colxx lg="5" md="12">
-                    <b-form-group :label="'Suspension Trasera'">
-                    <b-form-input type="Text" v-model="suspension_tra" :state="susT" :placeholder="'BALLESTAS Y AMORTIGUADORES'"/>
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="2" md="12">
-                    <b-form-group :label="'Presion de Cauchos'">
-                    <b-form-input type="Text" v-model="presion_cauchos" :state="pre" :placeholder="'35 PSI'"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="4" md="12" >
-                    <b-form-group :label="'Aceite de Motor'" >
-                    <b-form-input type="text" v-model="aceite_motor" :state="aceM" :placeholder="'ACEITE PARA MOTOR GASOLINA SAE 15W40'" />
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx lg="6" md="12">
-                    <b-form-group :label="'Aceite de Caja'">
-                    <b-form-input type="Text" v-model="aceite_caja" :state="aceC"  :placeholder="'ACEITE PARA TRANSMISIONES AUTOMATICAS DEXR 3'"/>
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="6" md="12" >
-                    <b-form-group :label="'Aceite Diferencial'" >
-                    <b-form-input type="text" v-model="aceite_diferencial" :state="aceD" :placeholder="'ACEITE PARA TRANSMISIONES SAE 80W90 API GL-5'" />
-                    </b-form-group>
-                  </b-colxx>
-                 </b-row>
+                  <b-row>
+                    <!-- YEISON -->
+                    <!-- <b-colxx lg="4" md="12" >
+                      <b-form-group :label="'Piloto o Responsable'" :description="'Nombre del chofer'">
+                      <b-form-input type="text" :state="resp" v-model="responsable" :placeholder="'Pablo Puerta'" />
+                      </b-form-group>
+                    </b-colxx> -->
+                    <b-colxx lg="6" md="12" >
+                      <b-form-group :label="'Placa'">
+                      <b-form-input type="text" v-model="placa" :state="pla" :placeholder="'ABCDEF'" :disabled="true"/>
+                      </b-form-group>
+                    </b-colxx>
+
+                    <b-colxx lg="6" md="12" >
+                      <b-form-group :label="'Sede'">
+                        <b-form-select
+                          class="form-select"
+                          :options="empresas"
+                          v-model="id_empresa"
+                          :state="sede"
+                        ></b-form-select>
+                      </b-form-group>
+                    </b-colxx>
+                    <!-- YEISON -->
+                  </b-row>
+                  <b-row>
+                    <!-- YEISON -->
+                    <b-colxx lg="3" md="12" >
+                      <b-form-group :label="'Piloto o Responsable'" :description="'Nombre del chofer'">
+                      <b-form-input type="text" :state="resp" v-model="responsable" :placeholder="'Pablo Puerta'" />
+                      </b-form-group>
+                    </b-colxx>
+                    <!-- YEISON -->
+                    <b-colxx lg="4" md="12">
+                      <b-form-group :label="'Clasificacion del vehículo'">
+                        <b-form-select
+                          class="form-select"
+                          :options="tipos"
+                          v-model="id_tipo_carga"
+                          :state="cla"
+                        ></b-form-select>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="4" md="12" >
+                      <b-form-group :label="'Tipo de Transporte '">
+                      <b-form-input type="text" v-model="tipo_transporte" :state="tipT" :placeholder="'PERSONAL'" />
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="4" md="12">
+                      <b-form-group :label="'Marca'">
+                        <b-form-select
+                          class="form-select"
+                          :options="marcas"
+                          v-model="id_marca"
+                          :state="mar"
+                        ></b-form-select>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="4" md="12">
+                      <b-form-group :label="'Modelo'">
+                      <b-form-input type="text" v-model="modelo" :state="mod" :placeholder="'CHEYENNE 4X2'"/>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="2" md="12">
+                      <b-form-group :label="'Ano'">
+                      <b-form-input type="text" v-model="ano" :state="an" :placeholder="'1992'"/>
+                      </b-form-group>
+                    </b-colxx>
+                  </b-row>
+                  <b-row>
+                    <b-colxx lg="3" md="12" >
+                      <b-form-group :label="'Tipo'" >
+                      <b-form-input type="text" v-model="tipov" :state="tip" :placeholder="'PICK UP'" />
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="2" md="12">
+                      <b-form-group :label="'Color'">
+                      <b-form-input type="text" v-model="color" :state="col" :placeholder="'BLANCO'"/>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="6" md="12">
+                      <b-form-group :label="'Motor'">
+                      <b-form-input type="text" v-model="motor" :state="mot" :placeholder="'VORTEC 5.3L 325'"/>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="1" md="12">
+                      <b-form-group :label="'Ejes'">
+                      <b-form-input type="text" v-model="ejes" :state="eje" :placeholder="'2'"/>
+                      </b-form-group>
+                    </b-colxx>
+                  </b-row>
+                  <b-row>
+                    <b-colxx lg="3" md="12" >
+                      <b-form-group :label="'Transmision'" >
+                      <b-form-input type="text" v-model="transmision" :state="tra" :placeholder="'AUTOMATICA 4L60E'" />
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="4" md="12">
+                      <b-form-group :label="'Cauchos'">
+                      <b-form-input type="text" v-model="cauchos" :state="cau" :placeholder="'265/70R17 CARRETERA'"/>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="2" md="12">
+                      <b-form-group :label="'Sistema Electrico'">
+                      <b-form-input type="text" v-model="sistema_electrico" :state="sis" :placeholder="'12V'"/>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="2" md="12">
+                      <b-form-group :label="'Bateria'">
+                      <b-form-input type="text" v-model="bateria" :state="bat" :placeholder="'GRUPO 24'"/>
+                      </b-form-group>
+                    </b-colxx>
+                  </b-row>
+                  <b-row>
+                    <b-colxx lg="5" md="12" >
+                      <b-form-group :label="'Suspension Delantera'" >
+                      <b-form-input type="text" v-model="suspension_del" :state="susD" :placeholder="'INDEPENDIENTE ESPIRAL Y MESETA'" />
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="5" md="12">
+                      <b-form-group :label="'Suspension Trasera'">
+                      <b-form-input type="text" v-model="suspension_tra" :state="susT" :placeholder="'BALLESTAS Y AMORTIGUADORES'"/>
+                      </b-form-group>
+                    </b-colxx>
+                  </b-row>
+                  <b-row>
+                    <b-colxx lg="2" md="12">
+                      <b-form-group :label="'Presion de Cauchos'">
+                      <b-form-input type="text" v-model="presion_cauchos" :state="pre" :placeholder="'35 PSI'"/>
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="4" md="12" >
+                      <b-form-group :label="'Aceite de Motor'" >
+                      <b-form-input type="text" v-model="aceite_motor" :state="aceM" :placeholder="'ACEITE PARA MOTOR GASOLINA SAE 15W40'" />
+                      </b-form-group>
+                    </b-colxx>
+                    <b-colxx lg="6" md="12">
+                      <b-form-group :label="'Aceite de Caja'">
+                      <b-form-input type="text" v-model="aceite_caja" :state="aceC"  :placeholder="'ACEITE PARA TRANSMISIONES AUTOMATICAS DEXR 3'"/>
+                      </b-form-group>
+                    </b-colxx>
+                  </b-row>
+                  <b-row>
+                    <b-colxx lg="6" md="12" >
+                      <b-form-group :label="'Aceite Diferencial'" >
+                      <b-form-input type="text" v-model="aceite_diferencial" :state="aceD" :placeholder="'ACEITE PARA TRANSMISIONES SAE 80W90 API GL-5'" />
+                      </b-form-group>
+                    </b-colxx>
+                  </b-row>
                  <div class="row justify-content-center">
                   <b-button type="submit" variant="primary" class="mt-4" @keyup.enter="guardar">Guardar Cambios</b-button>
                  </div>
@@ -202,6 +221,8 @@ export default ({
   name: 'buscar',
   data () {
     return {
+      empresas: [],
+      id_empresa: null,
       placa: null,
       show: false, // false
       mensaje: '',
@@ -245,6 +266,7 @@ export default ({
       an: '',
       tip: '',
       col: '',
+      sede: '',
       mot: '',
       eje: '',
       tra: '',
@@ -259,6 +281,7 @@ export default ({
       aceD: ''
     }
   },
+
   methods: {
     buscar (e) {
       if (!this.placa) {
@@ -290,6 +313,16 @@ export default ({
         this.titulo = 'Notificacion'
         this.addNotification()
         this.datos = response.data.data
+        /* this.empresas = response.data.empresas */
+
+        /* const empresasAll = response.data.empresas.map(item => {
+        return { text: item.empresa, value: item.id }
+      }) */
+      this.empresas = response.data.empresas.map(item => {
+        return { text: item.empresa, value: item.id }
+      })
+
+
         // console.log('aqui mi kilometraje obtenido' + this.datos.kilometraje)
         if (this.datos.id_status === 1) {
           this.statusc = 'success'
@@ -318,6 +351,9 @@ export default ({
         this.id_tipo_carga = this.datos.id_tipo_carga
         this.dir_foto = this.datos.dir_foto
         this.preview = this.dirphoto + '/' + this.datos.dir_foto
+        /* //YEISON */
+        this.id_empresa = this.datos.id_empresa
+        /* //YEISON */
       }).catch(error => {
         console.log('error', error)
       })
@@ -348,6 +384,10 @@ export default ({
       this.preview = null
     },
     async guardar (e) {
+      if (!this.id_empresa) {
+        this.sede = false
+        return true
+      }
       if (!this.responsable) {
         this.resp = false
         return true
@@ -464,7 +504,8 @@ export default ({
         color: this.color,
         responsable: this.responsable,
         tipo_transporte: this.tipo_transporte,
-        ano: this.ano
+        ano: this.ano,
+        id_empresa: this.id_empresa
       }
       axios.put(this.dirapi + '/updatecar/' + this.placa, body).then(response => {
         console.log('response', response)

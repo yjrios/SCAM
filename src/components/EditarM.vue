@@ -49,7 +49,7 @@
                             <b-form-radio v-model="actualizark" name="some-radios" value="2">No, dejar el de la solicitud</b-form-radio>
                             </b-form-group>
                         </div>
-                        <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
+                        <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados de {{ datos.empresa }}</p>
                     </b-card-body>
                 </b-card>
         </b-colxx>
@@ -187,7 +187,8 @@ export default ({
       fecha: null,
       precio: null,
       observacion: null,
-      actualizark: 2
+      actualizark: 2,
+      orden: null
     }
   },
   methods: {

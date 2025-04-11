@@ -29,14 +29,17 @@
         <b-colxx lg="4" md="12">
                 <b-card class="mb-4" no-body>
                    <div class="position-relative">
-                        <img :src="dirphoto+'/'+datos.dir_foto" class="card-img-top"/>
+                        <img :src="dirphoto + '/' + datos.dir_foto" class="card-img-top"/>
                         <b-badge variant="primary" pill class="position-absolute badge-top-left">CARGA {{datos.carga}}</b-badge>
                         <b-badge :variant='statusc' pill class="position-absolute badge-top-left-2">{{datos.status}}</b-badge>
                     </div>
                     <b-card-body>
                         <h6 class="mb-4 card-subtitle">{{datos.marca}} - {{datos.modelo}}</h6>
                         <h6>KILOMETROS : {{datos.kilometraje}} KM </h6><br>
-                        <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p>
+                        <!-- <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados del grupo AGROINLACA C.A</p> -->
+                        <!-- //YEISON -->
+                        <p class="card-text text-muted text-small mb-0 font-weight-light">Este vehiculo Pertenece a la flota de vehiculos registrados de {{ empresas[0].empresa }}</p>
+                        <!-- //YEISON -->
                     </b-card-body>
                 </b-card>
         </b-colxx>
@@ -44,7 +47,7 @@
         <b-colxx lg="8" md="12">
             <b-card class="mb-4" :title="'Datos Tecnicos del Vehiculo'">
             <b-row>
-              <b-colxx  lg="6" md="12">
+              <b-colxx lg="6" md="12">
                 <p class="azul">USUARIO : <span class="nada">{{datos.responsable}}</span></p>
                 <p class="azul">TIPO DE TRANSPORTE : <span class="nada"> {{datos.tipo_transporte}}</span></p>
                 <p class="azul">CLASIFICACION VEHICULO : <span class="nada">CARGA {{datos.carga}} </span></p>
@@ -52,11 +55,11 @@
                 <p class="azul">MARCA :<span class="nada"> {{datos.marca}} </span></p>
               </b-colxx>
               <b-colxx  lg="6" md="12">
+                <p class="azul">SEDE : <span class="nada"> {{empresas[0].empresa}} </span></p>
                 <p class="azul">MODELO : <span class="nada"> {{datos.modelo}} </span></p>
                 <p class="azul">AÑO :<span class="nada"> {{datos.ano}} </span>  </p>
                 <p class="azul">TIPO : <span class="nada">{{datos.tipo}}</span></p>
                 <p class="azul"> COLOR :<span class="nada"> {{datos.color}}</span> </p>
-                <p class="azul">MOTOR :<span class="nada"> {{datos.motor}} </span></p>
                 </b-colxx>
             </b-row>
             <b-row>
@@ -69,6 +72,7 @@
                 <p class="azul">SUSPENSION DELANTERA : <span class="nada"> {{datos.suspension_del}}</span> </p>
                 </b-colxx>
             <b-colxx  lg="6" md="12">
+                <p class="azul">MOTOR :<span class="nada"> {{datos.motor}} </span></p>
                 <p class="azul">SUSPENSION TRASERA :<span class="nada">  {{datos.suspension_tra}}</span></p>
                 <p class="azul">PRESION DE CAUCHOS :<span class="nada">  {{datos.presion_cauchos}}</span></p>
                 <p class="azul">ACEITE DE MOTOR :<span class="nada">  {{datos.aceite_motor}}</span></p>
@@ -95,6 +99,7 @@ export default ({
   name: 'buscar',
   data: function () {
     return {
+      empresas: [],
       placa: null,
       show: false, // false
       mensaje: '',
@@ -136,6 +141,9 @@ export default ({
         this.titulo = 'Notificacion'
         this.addNotification()
         this.datos = response.data.data
+        //YEISON
+        this.empresas = response.data.empresas.filter(item => { return item.id === Number(this.datos.id_empresa) })
+        //YEISON        
         // console.log('aqui mi kilometraje obtenido' + this.datos.kilometraje)
         if (this.datos.id_status === 1) {
           this.statusc = 'success'

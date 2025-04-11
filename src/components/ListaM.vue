@@ -177,7 +177,7 @@ export default {
               rows: [{
                 cells: [{
                   colSpan: 4,
-                  value: 'lISTADO DE SERVICIOS REALIZADOS',
+                  value: 'LISTADO DE SERVICIOS REALIZADOS',
                   style: { fontSize: 20, hAlign: 'Center', bold: true }
                 }]
               }]

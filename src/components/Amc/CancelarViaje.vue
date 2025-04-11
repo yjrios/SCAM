@@ -8,7 +8,7 @@
               <b-colxx lg="6" md="12" sm="12" xs="12">
                 <b-card class="mb-5">
                   <b-form @submit.stop.prevent inline class="row justify-content-center">
-                    <div class="form-group mb-1">
+                    <div class="form-group pb-2 pt-2">
                       <b-form-input
                       v-model.number="nroviaje_Search"
                       :state="validacion"
@@ -18,16 +18,19 @@
                       :disabled="disable">
                       </b-form-input>
                     </div>
-                    <div class="form-group mx-sm-3 mb-1 " >
+                    <div class="form-group mx-sm-3 mb-1">
                       <b-button type="submit" name="search" :hidden="disable" variant="primary" @click="buscar" @keyup.enter="buscar">Buscar</b-button>
+                    </div>
+                    <div class="form-group mx-sm-3">
+                      <b-button type="submit" class="form-group" :hidden="!disable" ref="btnlimpiar" variant="success" @click="limpiar">Limpiar</b-button>
                     </div>
                   </b-form>
                 </b-card>
               </b-colxx>
               <b-colxx lg="6" md="12" sm="12" xs="12">
-                <b-card class="mb-5" :hidden="!disable">
-                  <b-form @submit.stop.prevent inline id="formu" class="row justify-content-center px-0 mr-ml-0">
-                    <div class="form-group mb-3">
+                <b-card class="pt-0 pb-0" :hidden="!disable">
+                  <b-form @submit.stop.prevent inline id="formu" class="row justify-content-center">
+                    <div class="form-group mb-1">
                       <b-form-textarea
                         id="textarea-small"
                         v-model="observacion"
@@ -36,7 +39,7 @@
                         :state="observa"
                       ></b-form-textarea>
                     </div>
-                    <div class="form-group mx-sm-3 mb-3" >
+                    <div class="form-group mx-sm-3 mb-3">
                       <b-button type="submit" class="form-group" ref="btnenviar" variant="success" @click="cambiarstatus">Cancelar Viaje</b-button>
                     </div>
                   </b-form>
@@ -137,6 +140,9 @@
                             disabled
                           ></b-form-textarea>
                         </b-form-group>
+                        <b-form-group label="NRO VIAJE ANTERIOR">
+                          <b-form-input type="number" :state="asoc" v-model.number="asociado" placeholder="Nro de viaje anterior" disabled/>
+                        </b-form-group>
                       </b-colxx>
                     </b-tab>
                   </b-tabs>
@@ -158,6 +164,9 @@ export default {
   name: 'CancelarAmc',
   data () {
     return {
+      asoc: '',
+      asociado: 0,
+      statusViaje: 0,
       observacion: '',
       observa: '',
       horad: '',
@@ -208,31 +217,40 @@ export default {
           return
         }
         e.preventDefault()
-        const payload = { id_Viaje: this.nroviaje_Search, id_Status: this.statusCancelado, observacion: this.observacion }
-        axios.put(`${this.dirapi}/amc/cancelar/${payload.id_Viaje}`, payload)
-          .then(resp => {
-            if (resp.data.statuscode === 200 || resp.data.message === 'Cancelado Exitosamente') {
+        if (this.statusViaje === 2) {
+          const payload = { id_Viaje: this.nroviaje_Search, id_Status: this.statusCancelado, observacion: this.observacion }
+          axios.put(`${this.dirapi}/amc/cancelar/${payload.id_Viaje}`, payload)
+            .then(resp => {
+              if (resp.data.statuscode === 200 || resp.data.message === 'Cancelado Exitosamente') {
+                this.validacion = true
+                this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' ' + resp.data.message + '!'
+                this.tipoM = 'success filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.limpiar()
+              } else {
+                this.validacion = true
+                this.mensaje = '¡Error al cancelar viaje ' + this.nroviaje_Search + '!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+              }
+            })
+            .catch(error => {
+              console.log(error)
               this.validacion = true
-              this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' ' + resp.data.message + '!'
-              this.tipoM = 'success filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.limpiar()
-            } else {
-              this.validacion = true
-              this.mensaje = '¡Error al cancelar viaje ' + this.nroviaje_Search + '!'
+              this.mensaje = '¡Error en el servidor!'
               this.tipoM = 'error filled'
               this.titulo = 'Notificacion'
               this.addNotification()
-            }
-          })
-          .catch(error => {
-            this.validacion = true
-            this.mensaje = 'Error en el servidor'
-            this.tipoM = 'error filled'
-            this.titulo = 'Notificacion'
-            this.addNotification()
-          })
+            })
+        } else {
+          this.validacion = true
+          this.mensaje = '¡Viaje debe estar en estatus EN PROCESO para ser cancelado!'
+          this.tipoM = 'error filled'
+          this.titulo = 'Notificacion'
+          this.addNotification()
+        }
       }
     },
     limpiar () {
@@ -253,6 +271,7 @@ export default {
       this.show = false
       this.observacion = ''
       this.observa = true
+      this.asociado = 0
     },
     cargarStatusCombo () {
       this.status.forEach(item => {
@@ -267,114 +286,128 @@ export default {
         this.$refs.viaje.focus()
         this.mensaje = '¡Nro. de viaje no puede ser vacío!'
         this.tipoM = 'error filled'
-        this.titulo = 'Error al buscar'
+        this.titulo = 'Notificacion'
         this.addNotification()
         return true
       } else {
-        this.cargarStatusCombo()
-        this.$refs.btnenviar.focus()
-        axios.get(this.dirapi + '/amc/buscarviaje/' + this.nroviaje_Search)
-          .then(resp => {
-            if (resp.data.message === 'NO HAY DATA') {
-              this.show = false
-              this.validacion = false
-              this.mensaje = '¡No existe el viaje ' + this.nroviaje_Search + '!'
-              this.tipoM = 'error filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.nroviaje_Search = ''
-            } else {
-              this.disable = true
-              this.validacion = true
-              this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' Encontrado!'
-              this.tipoM = 'success filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
+        if (typeof(this.nroviaje_Search) === 'string') {
+          this.pre = false
+          this.$refs.viaje.focus()
+          this.mensaje = '¡El dato ingresado no es válido!'
+          this.tipoM = 'error filled'
+          this.titulo = 'Notificacion'
+          this.addNotification()
+        } else {
+          this.cargarStatusCombo()
+          this.$refs.btnenviar.focus()
+          axios.get(this.dirapi + '/amc/buscarviaje/' + this.nroviaje_Search)
+            .then(resp => {
+              if (resp.data.message === 'NO HAY DATA') {
+                this.show = false
+                this.validacion = false
+                this.mensaje = '¡No existe el viaje ' + this.nroviaje_Search + '!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.nroviaje_Search = ''
+              } else {
+                this.disable = true
+                this.validacion = true
+                this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' Encontrado!'
+                this.tipoM = 'success filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
 
-              resp.data.viaje.forEach(element => {
-                this.placa = element.placa
-                this.tipoVehiculo = element.tipo
-                this.cantidad = element.cantidad
-                this.cedula = element.cedula
-                this.nombreChofer = element.nombre
-                this.mercancia = element.carga
-                this.observaciones = element.detalle
-                resp.data.sedes.forEach(item => {
-                  if (element.id_SedeOrigen === item.id) {
-                    this.centroEnvio = item.descripcion
-                    this.dir_centro = item.direccion
+                resp.data.viaje.forEach(element => {
+                  this.placa = element.placa
+                  this.tipoVehiculo = element.tipo
+                  this.cantidad = element.cantidad
+                  this.cedula = element.cedula
+                  this.nombreChofer = element.nombre
+                  this.mercancia = element.carga
+                  this.observaciones = element.detalle
+                  if (element.Viaje_Asoc !== '' && element.Viaje_Asoc !== null) {
+                    this.asociado = element.Viaje_Asoc.split('-',2)
+                    this.asociado = Number(this.asociado[1])
                   }
-                  if (element.id_SedeDestino === item.id) {
-                    this.centroDestino = item.descripcion
-                    this.dir_centroD = item.direccion
-                  }
-                })
-                resp.data.detalle.map(ele => {
-                  if (ele.id_Viaje === element.id_Viaje) {
-                    if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
-                      let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
-                      let array = fechaini.split(',')
-                      let divfecha = array[0].split('/')
-                      let divHora = array[1].split(':')
-                      if (divHora[0] < 10) {
-                        this.horad = '0' + array[1].substr(1, 4)
-                      } else {
-                        this.horad = array[1].substr(1, 5)
+                  this.statusViaje = element.id_Status
+                  resp.data.sedes.forEach(item => {
+                    if (element.id_SedeOrigen === item.id) {
+                      this.centroEnvio = item.descripcion
+                      this.dir_centro = item.direccion
+                    }
+                    if (element.id_SedeDestino === item.id) {
+                      this.centroDestino = item.descripcion
+                      this.dir_centroD = item.direccion
+                    }
+                  })
+                  resp.data.detalle.map(ele => {
+                    if (ele.id_Viaje === element.id_Viaje) {
+                      if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
+                        let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
+                        let array = fechaini.split(',')
+                        let divfecha = array[0].split('/')
+                        let divHora = array[1].split(':')
+                        if (divHora[0] < 10) {
+                          this.horad = '0' + array[1].substr(1, 4)
+                        } else {
+                          this.horad = array[1].substr(1, 5)
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] > 9) {
+                          this.desde = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] > 9) {
+                          this.desde = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] <= 9) {
+                          this.desde = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] <= 9) {
+                          this.desde = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
                       }
-                      if (divfecha[0] > 9 && divfecha[1] > 9) {
-                        this.desde = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] > 9) {
-                        this.desde = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] <= 9) {
-                        this.desde = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] <= 9) {
-                        this.desde = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                      if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
+                        let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
+                        let array = fechaini.split(',')
+                        let divfecha = array[0].split('/')
+                        let divHora = array[1].split(':')
+                        if (divHora[0] < 10) {
+                          this.horah = '0' + array[1].substr(1, 4)
+                        } else {
+                          this.horah = array[1].substr(1, 5)
+                        }
+
+                        if (divfecha[0] <= 9 && divfecha[1] > 9) {
+                          this.hasta = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] <= 9) {
+                          this.hasta = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] > 9) {
+                          this.hasta = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] <= 9) {
+                          this.hasta = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
                       }
                     }
-                    if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
-                      let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
-                      let array = fechaini.split(',')
-                      let divfecha = array[0].split('/')
-                      let divHora = array[1].split(':')
-                      if (divHora[0] < 10) {
-                        this.horah = '0' + array[1].substr(1, 4)
-                      } else {
-                        this.horah = array[1].substr(1, 5)
-                      }
-
-                      if (divfecha[0] <= 9 && divfecha[1] > 9) {
-                        this.hasta = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] <= 9) {
-                        this.hasta = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] > 9) {
-                        this.hasta = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] <= 9) {
-                        this.hasta = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
-                      }
-                    }
-                  }
+                  })
+                  this.show = true
                 })
-                this.show = true
-              })
-            }
-          })
-          .catch(error => {
-            if (error.reponse && error.reponse.status === 500) {
-              this.show = false // false
-              this.validacion = false
-              this.mensaje = 'Error en el servidor!'
-              this.tipoM = 'error filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.nroviaje_Search = ''
-            }
-          })
+              }
+            })
+            .catch(error => {
+              if (error.reponse && error.reponse.status === 500) {
+                this.show = false
+                this.validacion = false
+                this.mensaje = '¡Error en el servidor!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.nroviaje_Search = ''
+              }
+            })
+        }
       }
     },
     addNotification (

@@ -89,7 +89,7 @@
                             <icon-card
                                 :title="'Vehiculos Inoperativos'"
                                 icon="simple-icon-dislike"
-                                :value="porin+' %' "
+                                :value="porin+' %'"
                                 :nombre="'inoperaporce'"
                                 :ligera="inolipor + '%'"
                                 :mediana="inomepor + '%'"
@@ -112,6 +112,7 @@
               :toolbarClick="gridExport">
                 <e-columns>
                   <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
+                  <e-column field= "empresa" headerText="Sede" textAlign="center" width=150></e-column>
                   <e-column field= "modelo" headerText="Modelo" textAlign="center" width=200></e-column>
                   <e-column field= "fecha1" headerText="Fecha" textAlign="center" width=130></e-column>
                   <e-column field= "status" headerText="Status" textAlign="center" width=130></e-column>
@@ -349,5 +350,4 @@ export default {
     padding-left: 10px;
     padding-top: 10px;
 }
-
 </style>

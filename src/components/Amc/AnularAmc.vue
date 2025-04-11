@@ -18,8 +18,11 @@
                       :disabled="disable">
                       </b-form-input>
                     </div>
-                    <div class="form-group mx-sm-3 mb-1 " >
+                    <div class="form-group mx-sm-3 mb-1">
                       <b-button type="submit" name="search" :hidden="disable" variant="primary" @click="buscar" @keyup.enter="buscar">Buscar</b-button>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-1">
+                      <b-button type="submit" class="form-group" :hidden="!disable" ref="btnlimpiar" variant="success" @click="limpiar">Limpiar</b-button>
                     </div>
                   </b-form>
                 </b-card>
@@ -32,7 +35,7 @@
                       <b-form-input type="text" placeholder="ANULAR" disabled ref="centro"/>
                       </b-form-group>
                     </div>
-                    <div class="form-group mx-sm-3 mb-1 " >
+                    <div class="form-group mx-sm-3 mb-1">
                       <b-button type="submit" class="form-group" ref="btnenviar" variant="success" @click="cambiarstatus">ANULAR</b-button>
                     </div>
                   </b-form>
@@ -128,10 +131,14 @@
                             id="textarea-small"
                             v-model="observaciones"
                             size="sm"
-                            placeholder="Describa sus observaciones"
+                            placeholder="Observaciones"
                             :state="obser"
                             disabled
                           ></b-form-textarea>
+                        </b-form-group>
+
+                        <b-form-group label="NRO VIAJE ANTERIOR">
+                          <b-form-input type="number" :state="asoc" v-model.number="asociado" placeholder="Nro de viaje anterior" disabled/>
                         </b-form-group>
                       </b-colxx>
                     </b-tab>
@@ -154,7 +161,9 @@ export default {
   name: 'AnularAmc',
   data () {
     return {
-      horad: '',
+      statusViaje: 0,
+      asociado: 0,
+      asoc: '',
       horah: '',
       statusAnulado: 0,
       validacion: true,
@@ -197,31 +206,39 @@ export default {
 
     async cambiarstatus () {
       if (this.disable) {
-        const payload = { id_Viaje: this.nroviaje_Search, id_Status: this.statusAnulado }
-        axios.put(`${this.dirapi}/amc/anular/${payload.id_Viaje}`, payload)
-          .then(resp => {
-            if (resp.data.statuscode === 200 || resp.data.message === 'Anulado Exitosamente') {
+        if (this.statusViaje === 1) {
+          axios.put(`${this.dirapi}/amc/anular/${this.nroviaje_Search}`, { placa: this.placa, asociado: this.asociado })
+            .then(resp => {
+              if (resp.data.statuscode === 200 || resp.data.message === 'Anulado Exitosamente') {
+                this.validacion = true
+                this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' ' + resp.data.message + '!'
+                this.tipoM = 'success filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.limpiar()
+              } else {
+                this.validacion = true
+                this.mensaje = '¡Error al anular viaje ' + this.nroviaje_Search + '!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+              }
+            })
+            .catch(error => {
+              console.log(error)
               this.validacion = true
-              this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' ' + resp.data.message + '!'
-              this.tipoM = 'success filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.limpiar()
-            } else {
-              this.validacion = true
-              this.mensaje = 'Error al anular viaje ' + this.nroviaje_Search
+              this.mensaje = '¡Error en el servidor!'
               this.tipoM = 'error filled'
               this.titulo = 'Notificacion'
               this.addNotification()
-            }
-          })
-          .catch(error => {
-            this.validacion = true
-            this.mensaje = 'Error en el servidor'
-            this.tipoM = 'error filled'
-            this.titulo = 'Notificacion'
-            this.addNotification()
-          })
+            })
+        } else {
+          this.validacion = true
+          this.mensaje = '¡Viaje debe estar en estatus PENDIENTE para ser anulado!'
+          this.tipoM = 'error filled'
+          this.titulo = 'Notificacion'
+          this.addNotification()
+        }
       }
     },
     limpiar () {
@@ -240,6 +257,7 @@ export default {
       this.dir_centroD = ''
       this.disable = false
       this.show = false
+      this.asociado = 0
     },
     cargarStatusCombo () {
       this.status.forEach(item => {
@@ -254,114 +272,128 @@ export default {
         this.$refs.viaje.focus()
         this.mensaje = '¡Nro. de viaje no puede ser vacío!'
         this.tipoM = 'error filled'
-        this.titulo = 'Error al buscar'
+        this.titulo = 'Notificacion'
         this.addNotification()
         return true
       } else {
-        this.cargarStatusCombo()
-        this.$refs.btnenviar.focus()
-        axios.get(this.dirapi + '/amc/buscarviaje/' + this.nroviaje_Search)
-          .then(resp => {
-            if (resp.data.message === 'NO HAY DATA') {
-              this.show = false
-              this.validacion = false
-              this.mensaje = '¡No existe el viaje ' + this.nroviaje_Search + '!'
-              this.tipoM = 'error filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.nroviaje_Search = ''
-            } else {
-              this.disable = true
-              this.validacion = true
-              this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' Encontrado!'
-              this.tipoM = 'success filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
+        if (typeof this.nroviaje_Search === 'string') {
+          this.pre = false
+          this.$refs.viaje.focus()
+          this.mensaje = '¡El dato ingresado no es válido!'
+          this.tipoM = 'error filled'
+          this.titulo = 'Notificacion'
+          this.addNotification()
+        } else {
+          this.cargarStatusCombo()
+          this.$refs.btnenviar.focus()
+          axios.get(this.dirapi + '/amc/buscarviaje/' + this.nroviaje_Search)
+            .then(resp => {
+              if (resp.data.message === 'NO HAY DATA') {
+                this.show = false
+                this.validacion = false
+                this.mensaje = '¡No existe el viaje ' + this.nroviaje_Search + '!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.nroviaje_Search = ''
+              } else {
+                this.disable = true
+                this.validacion = true
+                this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' Encontrado!'
+                this.tipoM = 'success filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
 
-              resp.data.viaje.forEach(element => {
-                this.placa = element.placa
-                this.tipoVehiculo = element.tipo
-                this.cantidad = element.cantidad
-                this.cedula = element.cedula
-                this.nombreChofer = element.nombre
-                this.mercancia = element.carga
-                this.observaciones = element.detalle
-                resp.data.sedes.forEach(item => {
-                  if (element.id_SedeOrigen === item.id) {
-                    this.centroEnvio = item.descripcion
-                    this.dir_centro = item.direccion
+                resp.data.viaje.forEach(element => {
+                  this.placa = element.placa
+                  this.tipoVehiculo = element.tipo
+                  this.cantidad = element.cantidad
+                  this.cedula = element.cedula
+                  this.nombreChofer = element.nombre
+                  this.mercancia = element.carga
+                  this.observaciones = element.detalle
+                  if (element.Viaje_Asoc !== '' && element.Viaje_Asoc !== null) {
+                    this.asociado = element.Viaje_Asoc.split('-', 2)
+                    this.asociado = Number(this.asociado[1])
                   }
-                  if (element.id_SedeDestino === item.id) {
-                    this.centroDestino = item.descripcion
-                    this.dir_centroD = item.direccion
-                  }
-                })
-                resp.data.detalle.map(ele => {
-                  if (ele.id_Viaje === element.id_Viaje) {
-                    if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
-                      let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
-                      let array = fechaini.split(',')
-                      let divfecha = array[0].split('/')
-                      let divHora = array[1].split(':')
-                      if (divHora[0] < 10) {
-                        this.horad = '0' + array[1].substr(1, 4)
-                      } else {
-                        this.horad = array[1].substr(1, 5)
+                  this.statusViaje = element.id_Status
+                  resp.data.sedes.forEach(item => {
+                    if (element.id_SedeOrigen === item.id) {
+                      this.centroEnvio = item.descripcion
+                      this.dir_centro = item.direccion
+                    }
+                    if (element.id_SedeDestino === item.id) {
+                      this.centroDestino = item.descripcion
+                      this.dir_centroD = item.direccion
+                    }
+                  })
+                  resp.data.detalle.map(ele => {
+                    if (ele.id_Viaje === element.id_Viaje) {
+                      if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
+                        let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
+                        let array = fechaini.split(',')
+                        let divfecha = array[0].split('/')
+                        let divHora = array[1].split(':')
+                        if (divHora[0] < 10) {
+                          this.horad = '0' + array[1].substr(1, 4)
+                        } else {
+                          this.horad = array[1].substr(1, 5)
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] > 9) {
+                          this.desde = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] > 9) {
+                          this.desde = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] <= 9) {
+                          this.desde = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] <= 9) {
+                          this.desde = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
                       }
-                      if (divfecha[0] > 9 && divfecha[1] > 9) {
-                        this.desde = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] > 9) {
-                        this.desde = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] <= 9) {
-                        this.desde = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] <= 9) {
-                        this.desde = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                      if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
+                        let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
+                        let array = fechaini.split(',')
+                        let divfecha = array[0].split('/')
+                        let divHora = array[1].split(':')
+                        if (divHora[0] < 10) {
+                          this.horah = '0' + array[1].substr(1, 4)
+                        } else {
+                          this.horah = array[1].substr(1, 5)
+                        }
+
+                        if (divfecha[0] <= 9 && divfecha[1] > 9) {
+                          this.hasta = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] <= 9) {
+                          this.hasta = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] > 9) {
+                          this.hasta = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] <= 9) {
+                          this.hasta = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
+                        }
                       }
                     }
-                    if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
-                      let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
-                      let array = fechaini.split(',')
-                      let divfecha = array[0].split('/')
-                      let divHora = array[1].split(':')
-                      if (divHora[0] < 10) {
-                        this.horah = '0' + array[1].substr(1, 4)
-                      } else {
-                        this.horah = array[1].substr(1, 5)
-                      }
-
-                      if (divfecha[0] <= 9 && divfecha[1] > 9) {
-                        this.hasta = '0' + divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] <= 9) {
-                        this.hasta = divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] > 9) {
-                        this.hasta = divfecha[0] + '-' + divfecha[1] + '-' + divfecha[2]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] <= 9) {
-                        this.hasta = '0' + divfecha[0] + '-0' + divfecha[1] + '-' + divfecha[2]
-                      }
-                    }
-                  }
+                  })
+                  this.show = true
                 })
-                this.show = true
-              })
-            }
-          })
-          .catch(error => {
-            if (error.reponse && error.reponse.status === 500) {
-              this.show = false // false
-              this.validacion = false
-              this.mensaje = 'Error en el servidor'
-              this.tipoM = 'error filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.nroviaje_Search = ''
-            }
-          })
+              }
+            })
+            .catch(error => {
+              if (error.reponse && error.reponse.status === 500) {
+                this.show = false // false
+                this.validacion = false
+                this.mensaje = '¡Error en el servidor!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.nroviaje_Search = ''
+              }
+            })
+        }
       }
     },
     addNotification (
@@ -373,7 +405,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['dirapi', 'dirphoto', 'status', 'viaje'])
+    ...mapState(['dirapi', 'status', 'viaje'])
   },
   mounted () {
     this.getInfoStatus()

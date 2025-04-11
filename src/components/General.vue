@@ -19,7 +19,7 @@
       </div>
       <gradient-with-radial-progress-card
         icon="simple-icon-basket-loaded"
-        :title="cargamediana+' Carga Median'"
+        :title="cargamediana+' Carga Mediana'"
         :detail="'Camiones con capacidad maxima 10 Toneladas'"
         :percent="Number(porcm)"
         :progressText="porcm + '%'"

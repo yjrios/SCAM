@@ -5,7 +5,7 @@
       <template>
         <div>
           <b-row>
-            <b-colxx  lg="5" md="12" >
+            <b-colxx lg="5" md="12" >
               <b-card class="mb-5">
                 <b-form @submit.stop.prevent inline class="row justify-content-center">
                   <div class="form-group mb-1">
@@ -18,10 +18,17 @@
                     :disabled="disable">
                     </b-form-input>
                   </div>
-                  <div class="form-group mx-sm-3 mb-1" >
+                  <div class="form-group mx-sm-3 mb-1">
                     <b-button type="submit" name="search" :hidden="disable" variant="primary" @click="buscar" @keyup.enter="buscar">Buscar</b-button>
                   </div>
                 </b-form>
+              </b-card>
+            </b-colxx>
+            <b-colxx lg="6" md="12" sm="12" xs="12">
+              <b-card class="mb-3" :hidden="!disable">
+                <div class="mx-sm-3 mb-1" align="center">
+                  <b-button type="submit" ref="btnlimpiar" variant="success" @click="limpiarVar">Limpiar</b-button>
+                </div>
               </b-card>
             </b-colxx>
           </b-row>
@@ -153,6 +160,10 @@
                             :state="obser"
                           ></b-form-textarea>
                         </b-form-group>
+
+                        <b-form-group label="NRO VIAJE ANTERIOR">
+                          <b-form-input type="number" :state="asoc" v-model.number="asociado" placeholder="Nro de viaje anterior"/>
+                        </b-form-group>
                       </b-colxx>
                     </b-tab>
                   </b-tabs>
@@ -178,6 +189,8 @@ export default {
   name: 'EditarAmc',
   data () {
     return {
+      asociado: 0,
+      asoc: '',
       value1: '',
       value2: '',
       hora1: '',
@@ -221,7 +234,7 @@ export default {
       pla: '',
       id_cedula: null
     }
-  }, 
+  },
   methods: {
     ...mapMutations(['cargarViajeAmc']),
     async buscar (e) {
@@ -229,118 +242,131 @@ export default {
         this.$refs.viaje.focus()
         this.mensaje = '¡Nro. de viaje no puede ser vacío!'
         this.tipoM = 'error filled'
-        this.titulo = 'Error al buscar'
+        this.titulo = 'Notificacion'
         this.addNotification()
         return true
       } else {
-        await axios.get(this.dirapi + '/amc/buscarviaje/' + this.nroviaje_Search)
-          .then(resp => {
-            if (resp.data.message === 'NO HAY DATA') {
-              this.show = false
-              this.validacion = false
-              this.mensaje = '¡No existe el viaje ' + this.nroviaje_Search + '!'
-              this.tipoM = 'error filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.nroviaje_Search = ''
-            } else {
-              this.disable = true
-              this.validacion = true
-              this.mensaje = '¡Viaje '+ this.nroviaje_Search + ' Encontrado!'
-              this.tipoM = 'success filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              resp.data.viaje.forEach(element => {
-                this.tiposPlacas.map(item => {
-                  if (item.text === element.placa) {
-                    this.placa = item.value
-                  }
-                })
-                resp.data.detalle.map(ele => {
-                  if (ele.id_Viaje === element.id_Viaje) {
-                    if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
-                      let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
-                      let array = fechaini.split(',')
-                      let divfecha = array[0].split('/')
-                      let divHora = array[1].split(':')
+        if (typeof this.nroviaje_Search === 'string') {
+          this.pre = false
+          this.$refs.viaje.focus()
+          this.mensaje = '¡El dato ingresado no es válido!'
+          this.tipoM = 'error filled'
+          this.titulo = 'Notificacion'
+          this.addNotification()
+        } else {
+          await axios.get(this.dirapi + '/amc/buscarviaje/' + this.nroviaje_Search)
+            .then(resp => {
+              if (resp.data.message === 'NO HAY DATA') {
+                this.show = false
+                this.validacion = false
+                this.mensaje = '¡No existe el viaje ' + this.nroviaje_Search + '!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.nroviaje_Search = ''
+              } else {
+                this.disable = true
+                this.validacion = true
+                this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' Encontrado!'
+                this.tipoM = 'success filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                resp.data.viaje.forEach(element => {
+                  this.tiposPlacas.map(item => {
+                    if (item.text === element.placa) {
+                      this.placa = item.value
+                    }
+                  })
+                  resp.data.detalle.map(ele => {
+                    if (ele.id_Viaje === element.id_Viaje) {
+                      if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
+                        let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
+                        let array = fechaini.split(',')
+                        let divfecha = array[0].split('/')
+                        let divHora = array[1].split(':')
 
-                      if (divHora[0] < 10) {
-                        this.value1 = '0' + array[1].substr(1, 4)
-                      } else {
-                        this.value1 = array[1].substr(1, 5)
-                      }
+                        if (divHora[0] < 10) {
+                          this.value1 = '0' + array[1].substr(1, 4)
+                        } else {
+                          this.value1 = array[1].substr(1, 5)
+                        }
 
-                      if (divfecha[0] > 9 && divfecha[1] > 9) {
-                        this.desde = divfecha[2] + '-' + divfecha[1] + '-' + divfecha[0]
+                        if (divfecha[0] > 9 && divfecha[1] > 9) {
+                          this.desde = divfecha[2] + '-' + divfecha[1] + '-' + divfecha[0]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] > 9) {
+                          this.desde = divfecha[2] + '-' + divfecha[1] + '-0' + divfecha[0]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] <= 9) {
+                          this.desde = divfecha[2] + '-0' + divfecha[1] + '-' + divfecha[0]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] <= 9) {
+                          this.desde = divfecha[2] + '-0' + divfecha[1] + '-0' + divfecha[0]
+                        }
                       }
-                      if (divfecha[0] <= 9 && divfecha[1] > 9) {
-                        this.desde = divfecha[2] + '-' + divfecha[1] + '-0' + divfecha[0]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] <= 9) {
-                        this.desde = divfecha[2] + '-0' + divfecha[1] + '-' + divfecha[0]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] <= 9) {
-                        this.desde = divfecha[2] + '-0' + divfecha[1] + '-0' + divfecha[0]
+                      if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
+                        let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
+                        let array = fechaini.split(',')
+                        let divfecha = array[0].split('/')
+                        let divHora = array[1].split(':')
+
+                        if (divHora[0] < 10) {
+                          this.value2 = '0' + array[1].substr(1, 4)
+                        } else {
+                          this.value2 = array[1].substr(1, 5)
+                        }
+
+                        if (divfecha[0] <= 9 && divfecha[1] > 9) {
+                          this.hasta = divfecha[2] + '-' + divfecha[1] + '-0' + divfecha[0]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] <= 9) {
+                          this.hasta = divfecha[2] + '-0' + divfecha[1] + '-' + divfecha[0]
+                        }
+                        if (divfecha[0] > 9 && divfecha[1] > 9) {
+                          this.hasta = divfecha[2] + '-' + divfecha[1] + '-' + divfecha[0]
+                        }
+                        if (divfecha[0] <= 9 && divfecha[1] <= 9) {
+                          this.hasta = divfecha[2] + '-0' + divfecha[1] + '-0' + divfecha[0]
+                        }
                       }
                     }
-                    if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
-                      let fechaini = new Date(ele.fchhoraestimada_Llegada).toLocaleString()
-                      let array = fechaini.split(',')
-                      let divfecha = array[0].split('/')
-                      let divHora = array[1].split(':')
-
-                      if (divHora[0] < 10) {
-                        this.value2 = '0' + array[1].substr(1, 4)
-                      } else {
-                        this.value2 = array[1].substr(1, 5)
-                      }
-
-                      if (divfecha[0] <= 9 && divfecha[1] > 9) {
-                        this.hasta = divfecha[2] + '-' + divfecha[1] + '-0' + divfecha[0]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] <= 9) {
-                        this.hasta = divfecha[2] + '-0' + divfecha[1] + '-' + divfecha[0]
-                      }
-                      if (divfecha[0] > 9 && divfecha[1] > 9) {
-                        this.hasta = divfecha[2] + '-' + divfecha[1] + '-' + divfecha[0]
-                      }
-                      if (divfecha[0] <= 9 && divfecha[1] <= 9) {
-                        this.hasta = divfecha[2] + '-0' + divfecha[1] + '-0' + divfecha[0]
-                      }
+                  })
+                  this.tipoVehiculo = element.tipo
+                  this.cantidad = element.cantidad
+                  this.cedula = element.cedula
+                  this.nombreChofer = element.nombre
+                  this.mercancia = element.carga
+                  this.observaciones = element.detalle
+                  if (element.Viaje_Asoc !== '' && element.Viaje_Asoc !== null) {
+                    this.asociado = element.Viaje_Asoc.split('-', 2)
+                    this.asociado = Number(this.asociado[1])
+                  }
+                  resp.data.sedes.map(item => {
+                    if (item.id === element.id_SedeOrigen) {
+                      this.centroEnvio = element.id_SedeOrigen
+                      this.dir_centro = item.direccion
                     }
-                  }
+                    if (item.id === element.id_SedeDestino) {
+                      this.centroDestino = element.id_SedeDestino
+                      this.dir_centroD = item.direccion
+                    }
+                  })
+                  this.show = true
                 })
-                this.tipoVehiculo = element.tipo
-                this.cantidad = element.cantidad
-                this.cedula = element.cedula
-                this.nombreChofer = element.nombre
-                this.mercancia = element.carga
-                this.observaciones = element.detalle
-                resp.data.sedes.map(item => {
-                  if (item.id === element.id_SedeOrigen) {
-                    this.centroEnvio = element.id_SedeOrigen
-                    this.dir_centro = item.direccion
-                  }
-                  if (item.id === element.id_SedeDestino) {
-                    this.centroDestino = element.id_SedeDestino
-                    this.dir_centroD = item.direccion
-                  }
-                })
-                this.show = true
-              })
-            }
-          })
-          .catch(error => {
-            if (error.response && error.response.status === 500) {
-              this.show = false
-              this.validacion = false
-              this.mensaje = 'Error en el servidor, intentar más tarde!'
-              this.tipoM = 'error filled'
-              this.titulo = 'Notificacion'
-              this.addNotification()
-              this.nroviaje_Search = ''
-            }
-          })
+              }
+            })
+            .catch(error => {
+              if (error.response && error.response.status === 500) {
+                this.show = false
+                this.validacion = false
+                this.mensaje = 'Error en el servidor, intentar más tarde!'
+                this.tipoM = 'error filled'
+                this.titulo = 'Notificacion'
+                this.addNotification()
+                this.nroviaje_Search = ''
+              }
+            })
+        }
       }
     },
     async cargarCombos () {
@@ -463,6 +489,11 @@ export default {
       })
       let fchCarga = new Date(this.desde + ' ' + this.value1)
       let fchDescarga = new Date(this.hasta + ' ' + this.value2)
+      let viajeAsoc = ''
+      if (this.asociado !== null && this.asociado !== 0 && this.asociado !== '') {
+        let Asoc = this.vehiculos.filter(i => i.ID === this.placa)
+        viajeAsoc = Asoc[0].PLACA + '-' + this.asociado
+      }
       const body = {
         id_Vehiculo: this.placa,
         id_Personal: this.id_cedula,
@@ -472,19 +503,38 @@ export default {
         detalle: this.observaciones,
         cantidad: this.cantidad,
         fchhoraestimada_Carga: fchCarga,
-        fchhoraestimada_Descarga: fchDescarga
+        fchhoraestimada_Descarga: fchDescarga,
+        Viaje_Asoc: viajeAsoc
       }
       axios.put(`${this.dirapi}/amc/editarviaje/${this.nroviaje_Search}`, body)
         .then(resp => {
-          if (resp.status === 200) {
+          if (resp.data.message === 'Modificacion Exitosa') {
             this.limpiarVar()
-            this.validacion = true
             this.mensaje = '¡Viaje ' + this.nroviaje_Search + ' actualizado con exito!'
             this.tipoM = 'success filled'
-            this.titulo = 'Guardar'
+            this.titulo = 'Notificacion'
             this.addNotification()
-            this.disable = false
-            this.show = false
+          }
+          if (resp.data.message === 'YA EXISTE VIAJE ASOCIADO') {
+            this.validacion = false
+            this.mensaje = '¡El viaje número ' + this.asociado + ' ya posee un asociado como anterior!'
+            this.tipoM = 'error filled'
+            this.titulo = 'Notificacion'
+            this.addNotification()
+          }
+          if (resp.data.message === 'NO EXISTE VIAJE') {
+            this.validacion = false
+            this.mensaje = '¡El viaje anterior número ' + this.asociado + ' no existe!'
+            this.tipoM = 'error filled'
+            this.titulo = 'Notificacion'
+            this.addNotification()
+          }
+          if (resp.data.message === 'PLACAS DIFERENTES') {
+            this.validacion = false
+            this.mensaje = '¡La placa del viaje ' + this.nroviaje_Search + ' y el viaje anterior no coinciden!'
+            this.tipoM = 'error filled'
+            this.titulo = 'Notificacion'
+            this.addNotification()
           }
         })
         .catch(error => {
@@ -492,19 +542,22 @@ export default {
             this.validacion = false
             this.mensaje = error.response.message
             this.tipoM = 'error filled'
-            this.titulo = 'Error'
+            this.titulo = 'Notificacion'
             this.addNotification()
           }
           if (error.response && error.response.status === 500) {
             this.validacion = false
-            this.mensaje = 'Error en el servidor'
+            this.mensaje = '¡Error en el servidor!'
             this.tipoM = 'error filled'
-            this.titulo = 'Error'
+            this.titulo = 'Notificacion'
             this.addNotification()
           }
         })
     },
     limpiarVar () {
+      this.disable = false
+      this.show = false
+      this.validacion = true
       this.nroviaje_Search = ''
       this.validacion = true
       this.placa = ''
@@ -537,6 +590,7 @@ export default {
       this.value2 = ''
       this.hora1 = true
       this.hora2 = true
+      this.asociado = 0
     }
   },
   computed: {
@@ -552,11 +606,13 @@ export default {
     },
     findPersonal () {
       if (this.cedula > 7) {
-        this.dropdown.personal.forEach(element => {
+        this.personal.forEach(element => {
           if (element.cedula === this.cedula) {
             this.nombreChofer = element.nombre
           }
         })
+      } else {
+        this.nombreChofer = ''
       }
       return this.nombreChofer
     }
@@ -567,3 +623,24 @@ export default {
 }
 </script>
 
+<style scoped>
+.slide-fade-enter-active {
+  transition: all .5s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+.azul {
+  color:#145388;
+  font-weight: bold;
+}
+.nada {
+  color:#000000;
+  font-weight: normal;
+}
+</style>

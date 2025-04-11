@@ -2,14 +2,31 @@
 <div>
    <b-card :title="'Nuevo Vehiculo'">
               <b-form @submit.prevent="guardar" id="formu">
-                 <b-row>
-                  <b-colxx lg="3" md="12" >
+                <b-row>
+                  <!--YEISON-->
+                  <b-colxx lg="3" md="12">
+                    <b-form-group :label="'Sede'">
+                      <b-form-select
+                        class="form-select"
+                        :options="empresas"
+                        v-model="id_empresa"
+                        :state="emp"
+                      ></b-form-select>
+                    </b-form-group>
+                  </b-colxx>
+                  <b-colxx lg="2" md="12" >
+                    <b-form-group :label="'Placa'">
+                    <b-form-input type="text" v-model="placa" :state="pla" :placeholder="'ABCDEF'" />
+                    </b-form-group>
+                  </b-colxx>
+                  <!--YEISON-->
+                  <b-colxx lg="3" md="12" sm="12" xs="12">
                     <b-form-group :label="'Piloto o Responsable'" :description="'Nombre del chofer'">
                     <b-form-input type="text" :state="resp" v-model="responsable" :placeholder="'Pablo Puerta'" />
                     </b-form-group>
                   </b-colxx>
-                   <b-colxx lg="4" md="12">
-                    <b-form-group :label="'Clasificacion del vehiculo'">
+                  <b-colxx lg="3" md="12">
+                    <b-form-group :label="'Clasificacion del vehículo'">
                       <b-form-select
                         class="form-select"
                         :options="tipos"
@@ -18,18 +35,25 @@
                       ></b-form-select>
                     </b-form-group>
                   </b-colxx>
+                  <!-- YEIOSN -->
+                  <!-- <b-colxx lg="3" md="12" >
+                    <b-form-group :label="'Tipo de Transporte '">
+                    <b-form-input type="text" v-model="tipo_transporte" :state="tipT" :placeholder="'PERSONAL'" />
+                    </b-form-group>
+                  </b-colxx> -->
+                </b-row>
+                <b-row>
+                  <!-- <b-colxx lg="2" md="12" >
+                    <b-form-group :label="'Placa'">
+                    <b-form-input type="text" v-model="placa" :state="pla" :placeholder="'ABCDEF'" />
+                    </b-form-group>
+                  </b-colxx> -->
                   <b-colxx lg="3" md="12" >
                     <b-form-group :label="'Tipo de Transporte '">
                     <b-form-input type="text" v-model="tipo_transporte" :state="tipT" :placeholder="'PERSONAL'" />
                     </b-form-group>
                   </b-colxx>
-                 </b-row>
-                 <b-row>
-                  <b-colxx lg="2" md="12" >
-                    <b-form-group :label="'Placa'">
-                    <b-form-input type="text" v-model="placa" :state="pla" :placeholder="'ABCDEF'" />
-                    </b-form-group>
-                  </b-colxx>
+                  <!-- YEIOSN -->
                    <b-colxx lg="3" md="12">
                     <b-form-group :label="'Marca'">
                       <b-form-select
@@ -173,6 +197,9 @@ export default {
       tipoM: '',
       marcas: [],
       tipos: [],
+      empresas: [],
+      id_empresa: null,
+      emp: '',
       resp: '',
       cla: '',
       tipT: '',
@@ -198,6 +225,12 @@ export default {
   },
   methods: {
     guardar (e) {
+      /* //YEISON */
+      if (!this.id_empresa) {
+        this.emp = false
+        return true
+      }
+      /* //YEISON */
       if (!this.responsable) {
         this.resp = false
         return true
@@ -284,6 +317,7 @@ export default {
       }
       e.preventDefault()
       const body = {
+        empresa: this.id_empresa,
         placa: this.placa,
         id_marca: this.id_marca,
         modelo: this.modelo,
@@ -361,7 +395,7 @@ export default {
   },
   mounted () {
     axios.get(this.dirapi + '/tipos_carga').then(response => {
-      console.log('response', response)
+      /* console.log('response', response) */
       const tipos = response.data.map(item => {
         return { value: item.id, text: item.carga }
       })
@@ -370,7 +404,7 @@ export default {
       console.log('error', error)
     })
     axios.get(this.dirapi + '/marcas').then(response => {
-      console.log('response', response)
+      /* console.log('response', response) */
       const marcas = response.data.map(item => {
         return { text: item.marca, value: item.id }
       })
@@ -378,6 +412,17 @@ export default {
     }).catch(error => {
       console.log('error', error)
     })
+  //YEISON
+    axios.get(this.dirapi + '/new/empresas/').then(response => {
+      /* console.log('response', response) */
+      const empresas = response.data.map(item => {
+        return { text: item.empresa, value: item.id }
+      })
+      this.empresas = [{ text: 'SELECCIONE', value: null }, ...empresas]
+    }).catch(error => {
+      console.log('error', error)
+    })
+  //YEISON
   },
   computed: {
     ...mapState(['dirapi'])

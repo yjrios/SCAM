@@ -14,14 +14,17 @@
               :toolbarClick="gridExport"
               :queryCellInfo='customiseCell'>
                 <e-columns>
-                  <e-column field= "posicion" headerText="Nro" textAlign="center" width=90></e-column>
+                  <e-column field= "posicion" headerText="Nro" textAlign="center" width=60></e-column>
                   <e-column field= "placa" headerText="Placa" textAlign="center" width=130></e-column>
                   <e-column field= "modelo" headerText="Modelo" textAlign="center" clipMode='EllipsisWithTooltip'></e-column>
                   <e-column field= "marca" headerText="Marca" textAlign="center" width=130></e-column>
                   <e-column field= "status" headerText="Status" textAlign="center" width=130 ></e-column>
-                  <e-column field= "detalles" headerText="Detalle" textAlign="Center" width=160 clipMode='EllipsisWithTooltip'></e-column>
+                  <!-- YEISON -->
+                  <e-column field= "empresa" headerText="Sede" textAlign="center" width=130></e-column>
+                  <!-- YEISON -->
+                  <e-column field= "detalles" headerText="Detalle" textAlign="Center" width=130 clipMode='EllipsisWithTooltip'></e-column>
                   <e-column field= "fecha" headerText="Fecha" textAlign="center" width=120 ></e-column>
-                  <e-column field= "dias" headerText="Dias Transcurridos" textAlign="Center" width=160 ></e-column>
+                  <e-column field= "dias" headerText="Dias Transcurridos" textAlign="Center" width=100 ></e-column>
                 </e-columns>
               </ejs-grid>
             </div>
@@ -65,6 +68,7 @@ export default {
           modelo: item.modelo,
           marca: item.marca,
           status: item.status,
+          empresa: item.empresa,
           fecha: moment(item.fecha).format('DD-MM-YYYY'),
           dias: hoy.diff(fecha, 'days'),
           colorS: color
@@ -79,12 +83,25 @@ export default {
     console.log('updated lista')
   },
   mounted () {
-    console.log('mounted lista')
+    console.log('mounted lista linea 86')
     var hoy = moment()
     this.lista = this.list.map(item => {
       var fecha = moment(item.fecha)
       var color = item.status
+      /* YEISON */
+
       return { posicion: item.posicion,
+        placa: item.placa,
+        modelo: item.modelo,
+        marca: item.marca,
+        status: item.status,
+        empresa: item.empresa,
+        fecha: moment(item.fecha).format('DD-MM-YYYY'),
+        dias: hoy.diff(fecha, 'days'),
+        detalles: item.detalles,
+        colorS: color
+      }
+      /* return { posicion: item.posicion,
         placa: item.placa,
         modelo: item.modelo,
         marca: item.marca,
@@ -93,7 +110,8 @@ export default {
         dias: hoy.diff(fecha, 'days'),
         detalles: item.detalles,
         colorS: color
-      }
+      } */
+      /* YEISON */
     })
   },
   methods: {
@@ -146,7 +164,7 @@ export default {
               rows: [{
                 cells: [{
                   colSpan: 4,
-                  value: 'lISTADO DE FLOTA DE VEHICULOS DE AGL',
+                  value: 'LISTADO DE FLOTA DE VEHICULOS DE AGL',
                   style: { fontSize: 20, hAlign: 'Center', bold: true }
                 }]
               }]

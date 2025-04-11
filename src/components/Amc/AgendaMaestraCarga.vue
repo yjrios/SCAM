@@ -82,7 +82,7 @@
                   <b-form-select
                   class="form-select"
                   :options="tiposPlacas"
-                  v-model="placa"
+                  v-model="idplaca"
                   :state="pla"
                   @change="SetTpoVehiculo()"
                   ></b-form-select>
@@ -94,11 +94,11 @@
                 </b-form-group>
 
                 <b-form-group label="CÉDULA">
-                <b-form-input type="text" v-model="cedula" :state="ced" placeholder="ingrese identidad"/>
+                <b-form-input type="text" v-model="cedula" :state="ced" placeholder="Ingrese identidad"/>
                 </b-form-group>
 
                 <b-form-group label="CHOFER">
-                <b-form-input  type="text" @change="findPersonal" v-model="nombreChofer" :state="chof" placeholder="Ingrese nombre y apellido" disabled/>
+                <b-form-input  type="text" @change="findPersonal" v-model="nombreChofer" :state="chof" placeholder="Nombre y Apellido" disabled/>
                 </b-form-group>
 
               </b-tab>
@@ -123,7 +123,10 @@
                     size="sm"
                     placeholder="Describa sus observaciones"
                   ></b-form-textarea>
-                </b-form-group>                
+                </b-form-group>
+                <b-form-group label="NRO VIAJE ANTERIOR">
+                  <b-form-input type="number" :state="asoc" v-model.number="asociado" placeholder="Nro de viaje anterior"/>
+                </b-form-group>
               </b-tab>
             </b-tabs>
           </b-colxx>
@@ -142,12 +145,15 @@ export default {
   name: 'RegistrarAmc',
   data () {
     return {
+      asociado: 0,
+      asoc: '',
       hora1: '',
       hora2: '',
       value1: null,
       value2: null,
       id_cedula: 0,
       centroDestino: null,
+      idplaca: null,
       placa: null,
       id_status: 1,
       mensaje: '',
@@ -203,8 +209,9 @@ export default {
     },
     SetTpoVehiculo () {
       this.vehiculos.forEach(item => {
-        if (item.ID === this.placa) {
+        if (item.ID === this.idplaca) {
           this.tipoVehiculo = item.TIPO
+          this.placa = item.PLACA
           return this.tipoVehiculo
         }
       })
@@ -218,7 +225,7 @@ export default {
         this.des = false
         return true
       }
-      if (!this.placa) {
+      if (!this.idplaca) {
         this.pla = false
         return true
       }
@@ -279,9 +286,12 @@ export default {
       })
       let fchCarga = new Date(this.desde + ' ' + this.value1)
       let fchDescarga = new Date(this.hasta + ' ' + this.value2)
-
+      let viajeAsoc = ''
+      if (this.asociado !== 0 && this.asociado !== null && this.asociado !== '') {
+        viajeAsoc = this.placa + '-' + this.asociado
+      }
       const body = {
-        id_Vehiculo: this.placa,
+        id_Vehiculo: this.idplaca,
         cantidad: this.cantidad,
         id_Personal: this.id_cedula,
         id_SedeDestino: this.centroDestino,
@@ -290,28 +300,46 @@ export default {
         carga: this.mercancia,
         detalle: this.observaciones,
         fchhoraestimada_Carga: fchCarga,
-        fchhoraestimada_Descarga: fchDescarga
+        fchhoraestimada_Descarga: fchDescarga,
+        Viaje_Asoc: viajeAsoc
       }
       await axios.post(this.dirapi + '/amc/registrar', body)
         .then(resp => {
-          if (resp.status === 200) {
-            this.mensaje = '¡Registro Viaje Exitoso!'
-            this.tipoM = 'success filled'
-            this.titulo = 'Agregar'
+          if (resp.data.message === 'YA EXISTE') {
+            this.mensaje = '¡Ya existe un viaje anidado con el número ' + this.asociado + '!'
+            this.tipoM = 'error filled'
+            this.titulo = 'Notificacion'
             this.addNotification()
-            this.limpiarVar()
+          } else if (resp.data.message === 'NO EXISTE VIAJE ASOCIADO') {
+            this.mensaje = '¡No existe el viaje anterior ingresado!'
+            this.tipoM = 'error filled'
+            this.titulo = 'Notificacion'
+            this.addNotification()
+          } else if (resp.data.message === 'PLACAS DIFERENTES') {
+            this.mensaje = '¡La placa del nuevo viaje y del viaje asociado no coinciden!'
+            this.tipoM = 'error filled'
+            this.titulo = 'Notificacion'
+            this.addNotification()
+          } else {
+            if (resp.status === 200) {
+              this.mensaje = '¡Registro Viaje Exitoso!'
+              this.tipoM = 'success filled'
+              this.titulo = 'Notificacion'
+              this.addNotification()
+              this.limpiarVar()
+            }
           }
         })
         .catch(error => {
-          if (error.response.status === 400) {
+          if (error.response & error.response.status === 400) {
             this.mensaje = '¡Error al registrar, intente nuevamente!'
             this.tipoM = 'error filled'
-            this.titulo = 'Error'
+            this.titulo = '¡Notificacion!'
             this.addNotification()
           } else {
             this.mensaje = '¡Error del servidor, intente luego!'
             this.tipoM = 'error filled'
-            this.titulo = 'Error'
+            this.titulo = '¡Notificacion!'
             this.addNotification()
           }
         })
@@ -324,11 +352,13 @@ export default {
       this.$notify(type, title, message, { duration: 3000, permanent: false })
     },
     limpiarVar () {
+      this.asoc = true
+      this.asociado = 0
       this.value1 = ''
       this.value2 = ''
       this.hora1 = true
       this.hora2 = true
-      this.placa = null
+      this.idplaca = null
       this.pla = true
       this.cedula = ''
       this.ced = true
@@ -397,7 +427,7 @@ export default {
     uppercaseCanti () {
       this.cantidad = this.cantidad.toUpperCase()
       return this.cantidad
-    },
+    }
   }
 }
 </script>

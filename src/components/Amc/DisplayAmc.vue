@@ -60,7 +60,7 @@
           <e-column field= "fch_Entrega" headerText="Fecha Estimada D" textAlign="center" width=150 ></e-column>
           <e-column field= "categoria" headerText="Categoría" textAlign="Center" width=160 ></e-column>
           <e-column field= "cantidad" headerText="Cantidad" textAlign="Center" width=120 ></e-column>
-          <e-column field= "detalles" headerText="Observaciones" textAlign="Center" width=120 ></e-column>
+          <e-column field= "detalles" headerText="Observaciones" textAlign="Center" width=120 clipMode='EllipsisWithTooltip'></e-column>
         </e-columns>
       </ejs-grid>
     </div>
@@ -69,7 +69,7 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { Page, Sort, Filter, Toolbar, ExcelExport, Aggregate } from '@syncfusion/ej2-vue-grids'
 var moment = require('moment')
 
@@ -91,7 +91,8 @@ export default {
       titulo: '',
       tipoM: '',
       des: '',
-      has: ''
+      has: '',
+      arraycolores: []
     }
   },
   provide: {
@@ -102,8 +103,8 @@ export default {
     limpiarfechas () {
       if (this.desde !== null || this.hasta !== null) {
         this.todos = true
-        return this.todos
       }
+      return this.todos
     }
   },
   watch: {
@@ -111,11 +112,7 @@ export default {
       this.cargargrid()
     }
   },
-  created () {
-    this.getInfoViajes()
-  },
   updated () {
-    this.getInfoViajes()
     this.$refs.grid.refresh()
   },
   mounted () {
@@ -123,7 +120,6 @@ export default {
   },
   methods: {
     ...mapMutations(['cargarViajeAmc']),
-    ...mapActions(['getInfoViajes']),
 
     vaijeall () {
       this.desde = null
@@ -131,6 +127,7 @@ export default {
       this.cargargrid()
       this.todos = false
     },
+
     addNotification (
       type = this.tipoM,
       title = this.titulo,
@@ -140,6 +137,7 @@ export default {
     },
 
     cargargrid () {
+      this.arraycolores = []
       axios.get(this.dirapi + '/amc/viajes')
         .then(resp => {
           this.lista = resp.data.viaje.map(item => {
@@ -155,17 +153,53 @@ export default {
             })
             let fchEcarga = ''
             let fchEdescarga = ''
-
             resp.data.detalle.map(ele => {
               if (ele.id_Viaje === item.id_Viaje) {
-                if (ele.id_Evento === 2 && ele.fchhoraestimada_Llegada !== null) {
-                  fchEcarga = moment(ele.fchhoraestimada_Llegada).format('DD-MM-YYYY')
+                let objcolores = {
+                  colorw: false,
+                  colorp: false,
+                  id_Evento: 0,
+                  id: 0
+                } 
+                if (ele.id_Evento === 2) {
+                  if (ele.fchhoraestimada_Llegada !== null) {
+                    fchEcarga = moment(ele.fchhoraestimada_Llegada).format('DD-MM-YYYY')
+                  }
+                  if (ele.fchhorareal_Llegada === null && ele.fchhorareal_Salida === null) {
+                    objcolores.colorw = true
+                    objcolores.colorp = false
+                    objcolores.id = ele.id_Viaje
+                    objcolores.id_Evento = ele.id_Evento
+                  }
+                  if (ele.fchhorareal_Llegada !== null && ele.fchhorareal_Salida === null) {
+                    objcolores.colorw = false
+                    objcolores.colorp = true
+                    objcolores.id = ele.id_Viaje
+                    objcolores.id_Evento = ele.id_Evento
+                  }
+                  this.arraycolores.push(objcolores)
                 }
-                if (ele.id_Evento === 3 && ele.fchhoraestimada_Llegada !== null) {
-                  fchEdescarga = moment(ele.fchhoraestimada_Llegada).format('DD-MM-YYYY')
+                if (ele.id_Evento === 3) {
+                  if (ele.fchhoraestimada_Llegada !== null) {
+                    fchEdescarga = moment(ele.fchhoraestimada_Llegada).format('DD-MM-YYYY')
+                  }
+                  if (ele.fchhorareal_Llegada === null && ele.fchhorareal_Salida === null) {
+                    objcolores.colorw = true
+                    objcolores.colorp = false
+                    objcolores.id = ele.id_Viaje
+                    objcolores.id_Evento = ele.id_Evento
+                  }
+                  if (ele.fchhorareal_Llegada !== null && ele.fchhorareal_Salida === null) {
+                    objcolores.colorw = false
+                    objcolores.colorp = true
+                    objcolores.id = ele.id_Viaje
+                    objcolores.id_Evento = ele.id_Evento
+                  }
+                  this.arraycolores.push(objcolores)
                 }
               }
             })
+ 
             return { id_viaje: item.id_Viaje,
               placa: item.placa,
               sedeE: this.descripcionO,
@@ -187,7 +221,7 @@ export default {
               if (fecAuxDesde.toISOString() <= fecAuxHasta.toISOString()) {
                 this.lista = this.lista.filter(item => {
                   let auxfecha = item.fch_Carga.split('-')
-                  auxfecha = new Date(auxfecha[2] + '-'+auxfecha[1] + '-'+auxfecha[0])
+                  auxfecha = new Date(auxfecha[2] + '-' + auxfecha[1] + '-' + auxfecha[0])
                   auxfecha = auxfecha.toISOString().split('T', 1)
                   if (auxfecha[0] >= this.desde && auxfecha[0] <= this.hasta) {
                     return item
@@ -197,18 +231,18 @@ export default {
                 this.has = true
                 this.mensaje = '¡Listado Actualizado!'
                 this.tipoM = 'success filled'
-                this.titulo = 'Filtrado Exitoso'
+                this.titulo = 'Notificacion'
                 this.addNotification()
               } else {
                 this.des = false
                 this.has = false
                 this.mensaje = '¡Fecha desde debe ser menor que fecha hasta!'
                 this.tipoM = 'error filled'
-                this.titulo = 'Listar por fecha'
+                this.titulo = 'Notificacion'
                 this.addNotification()
               }
             }
-            this.lista = this.lista.sort((a,b) => b.id_viaje - a.id_viaje)
+            this.lista = this.lista.sort((a, b) => b.id_viaje - a.id_viaje)
           }
         })
         .catch(e => {
@@ -236,6 +270,24 @@ export default {
           args.cell.classList.add('DANGER')
         }
       }
+      if (args.column.field === 'sedeE') {
+        this.arraycolores.forEach(ele => {
+          if (args.data['id_viaje'] === ele.id && ele.colorp && ele.id_Evento === 2 && args.data['status'] !== 'CANCELADO') {
+            args.cell.classList.add('PRIMARY')
+          } else if (args.data['id_viaje'] === ele.id && ele.colorw && ele.id_Evento === 2 && args.data['status'] !== 'CANCELADO') {
+            args.cell.classList.add('WARNING')
+          }
+        })
+      }
+      if (args.column.field === 'sedeR') {
+        this.arraycolores.forEach(ele => {
+          if (args.data['id_viaje'] === ele.id && ele.colorp && ele.id_Evento === 3 && args.data['status'] !== 'CANCELADO') {
+            args.cell.classList.add('PRIMARY')
+          } else if (args.data['id_viaje'] === ele.id && ele.colorw && ele.id_Evento === 3 && args.data['status'] !== 'CANCELADO') {
+            args.cell.classList.add('WARNING')
+          }
+        })
+      }
     },
 
     gridExport (args) {
@@ -247,8 +299,8 @@ export default {
           let fchIni = []
           let fchFin = []
           let cantidadCancelados = this.lista.filter(item => item.status === 'CANCELADO')
-          let porcentaje = 100 - ( (cantidadCancelados.length * 100) / this.lista.length )
-          let m = Number( (Math.abs(porcentaje) * 100).toPrecision(15) )
+          let porcentaje = 100 - ((cantidadCancelados.length * 100) / this.lista.length)
+          let m = Number((Math.abs(porcentaje) * 100).toPrecision(15))
           porcentaje = Math.round(m) / 100 * Math.sign(porcentaje)
           if ((this.desde && this.hasta) || (this.desde !== null && this.hasta !== null)) {
             fchIni = this.desde.split('-', 3)
